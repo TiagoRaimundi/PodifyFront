@@ -1,3 +1,4 @@
+import AppInput from '@ui/AppInput';
 import colors from '@utils/colors';
 import {FC} from 'react';
 import {StyleSheet, View, TextInput, SafeAreaView, Text} from 'react-native';
@@ -9,10 +10,9 @@ const SignUp: FC<Props> = props => {
     <SafeAreaView style={styles.container}>
       <View style={styles.formContainer}>
       <Text style={styles.label}>Name</Text>
-      <TextInput
+      <AppInput
         placeholder="João Henrique"
-        placeholderTextColor={colors.INACTIVE_CONTRAST}
-        style={styles.input}
+        style={{borderColor: 'yellow'}}
       />
 
       <Text style={styles.label}>Email</Text>
@@ -20,6 +20,8 @@ const SignUp: FC<Props> = props => {
         placeholder="joao@gmail.com"
         placeholderTextColor={colors.INACTIVE_CONTRAST}
         style={styles.input}
+        keyboardType='email-address'
+        autoCapitalize='none'
       />
 
       <Text style={styles.label}>Password</Text>
@@ -27,6 +29,8 @@ const SignUp: FC<Props> = props => {
         placeholder="********"
         placeholderTextColor={colors.INACTIVE_CONTRAST}
         style={styles.input}
+        autoCapitalize='none'
+        secureTextEntry={true}
       />
       </View>
     </SafeAreaView>
