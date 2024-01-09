@@ -1,4 +1,4 @@
-import AppInput from '@ui/AppInput';
+import AuthInputField from '@components/AuthInputField';
 import colors from '@utils/colors';
 import {FC} from 'react';
 import {StyleSheet, View, TextInput, SafeAreaView, Text} from 'react-native';
@@ -9,29 +9,9 @@ const SignUp: FC<Props> = props => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.formContainer}>
-      <Text style={styles.label}>Name</Text>
-      <AppInput
-        placeholder="João Henrique"
-        style={{borderColor: 'yellow'}}
-      />
-
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        placeholder="joao@gmail.com"
-        placeholderTextColor={colors.INACTIVE_CONTRAST}
-        style={styles.input}
-        keyboardType='email-address'
-        autoCapitalize='none'
-      />
-
-      <Text style={styles.label}>Password</Text>
-      <TextInput
-        placeholder="********"
-        placeholderTextColor={colors.INACTIVE_CONTRAST}
-        style={styles.input}
-        autoCapitalize='none'
-        secureTextEntry={true}
-      />
+      <AuthInputField placeholder="John Doe" label="Name" containerStyle={styles.marginBottom}/>
+      <AuthInputField placeholder="johndoe@gmail.com" label="Email" keyboardType='email-address' containerStyle={styles.marginBottom}/>
+      <AuthInputField placeholder="********" label="Password" autoCapitalize='none' secureTextEntry/>
       </View>
     </SafeAreaView>
   );
@@ -45,21 +25,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 15,
   },
-
-  input: {
-    borderWidth: 2,
-    borderColor: colors.SECONDARY,
-    height: 45,
-    borderRadius: 25,
-    color: colors.CONTRAST,
-    padding: 10,
-  },
-  label:{
-    color: colors.CONTRAST
-  },
   formContainer:{
     width: '95%',
     paddingHorizontal: 15,
+  },
+  marginBottom: {
+    marginBottom: 20,
   }
 });
 
