@@ -1,9 +1,11 @@
 import AppInput from '@ui/AppInput';
 import colors from '@utils/colors';
+import { useFormikContext } from 'formik';
 import {FC} from 'react';
 import {View, StyleSheet, Text, TextInput, TextInputProps, StyleProp, ViewStyle} from 'react-native';
 
 interface Props {
+  name: string;
   label?: string;
   value?: string;
   errorMsg?: string;
@@ -12,21 +14,27 @@ interface Props {
   autoCapitalize?: TextInputProps['autoCapitalize']
   secureTextEntry?:boolean;
   containerStyle?: StyleProp<ViewStyle>
-  onChange?:(text: string) => void
+ 
 }
 
 const AuthInputField: FC<Props> = props => {
+  const {handleChange, values, errors, touched, handleBlur} = useFormikContext<{[key: string]: string}>()
+
   const {
-      label,
-      placeholder,
-      keyboardType,
-      autoCapitalize,
-      secureTextEntry,
-      containerStyle,
-      errorMsg,
-      value,
-      onChange
+    label,
+    placeholder,
+    keyboardType,
+    autoCapitalize,
+    secureTextEntry,
+    containerStyle,
+    name
 } = props;
+
+  const errorMsg = touched[name] && errors[name]? errors[name] : '';
+  
+
+
+
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={styles.labelContainer}>
@@ -39,8 +47,9 @@ const AuthInputField: FC<Props> = props => {
         keyboardType={keyboardType} 
         autoCapitalize={autoCapitalize}
         secureTextEntry={secureTextEntry}
-        onChangeText={onChange}
-        value={value}
+        onChangeText={handleChange(name)}
+        value={values[name]}
+        onBlur={handleBlur(name)}
          />
     </View>
   );
