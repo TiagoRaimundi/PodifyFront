@@ -11,6 +11,11 @@ const SignUp: FC<Props> = props => {
     email: '',
     password: ''
   })
+  const [errorInfo, setErrorInfo] = useState({
+    name: '',
+    email: '',
+    password: ''
+  })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,6 +27,7 @@ const SignUp: FC<Props> = props => {
         onChange={(text) => {
           setUserInfo({...userInfo, name: text})
         }}
+        errorMsg={errorInfo.name}
       />
       <AuthInputField 
         placeholder="johndoe@gmail.com"
@@ -31,6 +37,7 @@ const SignUp: FC<Props> = props => {
         onChange={(text) => {
           setUserInfo({...userInfo, email: text})
         }}
+        errorMsg={errorInfo.email}
       />
       <AuthInputField 
         placeholder="********"
@@ -40,9 +47,37 @@ const SignUp: FC<Props> = props => {
         onChange={(text) => {
           setUserInfo({...userInfo, password: text})
         }}
+        errorMsg={errorInfo.password}
       />
       <Button 
       onPress={() => {
+        if(!userInfo.name) return setErrorInfo({
+          email: '',
+          password: '',
+          name: "Name is missing!"
+          
+        })
+        if(!userInfo.email) return setErrorInfo 
+        ({
+          name: '',
+          password: '',
+          email: "Email is missing!"
+          
+        })
+        if(!userInfo.password) 
+        return setErrorInfo 
+        ({
+          name:'',
+          email: '',
+          password: "Password is missing!"
+          
+        });
+        ({
+          name:'',
+          email: '',
+          password: "Password is missing!"
+          
+        })
         console.log(userInfo)
       }}
       title='Sign up'/>
