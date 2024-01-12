@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import SubmitBtn from '@components/form/SumitBtn';
 import Icon from 'react-native-vector-icons/Entypo'
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
+import AppLink from '@ui/AppLink';
 
 const signupSchema = yup.object({
   name: yup
@@ -81,7 +82,10 @@ const SignUp: FC<Props> = props => {
             onRightIconPress={togglePasswordView}
           />
           <SubmitBtn title="Sign Up"/>
-        
+          <View style={styles.linkContainer}>
+            <AppLink title= "I lost My Password"/>
+            <AppLink title='Sign in'/>
+          </View>
           
         </View>
       </Form>
@@ -103,6 +107,12 @@ const styles = StyleSheet.create({
   marginBottom: {
     marginBottom: 20,
   },
+  linkContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 20
+  }
 });
 
 export default SignUp;

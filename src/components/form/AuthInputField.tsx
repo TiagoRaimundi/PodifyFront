@@ -6,12 +6,12 @@ import {
   View,
   StyleSheet,
   Text,
-  TextInput,
   TextInputProps,
   StyleProp,
   ViewStyle,
   Pressable,
 } from 'react-native';
+
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
