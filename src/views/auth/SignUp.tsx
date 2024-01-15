@@ -10,6 +10,7 @@ import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
 import { ColorSpace } from 'react-native-reanimated';
 import CircleUi from '@ui/CircleUi';
+import AuthFormContainer from '@components/AuthFormContainer';
 
 
 const signupSchema = yup.object({
@@ -50,26 +51,17 @@ const SignUp: FC<Props> = props => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <CircleUi position='top-left' size={200}/>
-      <CircleUi position='top-right' size={100}/>
-      <CircleUi position='bottom-left' size={100}/>
-      <CircleUi position='bottom-right' size={200}/>
-
-      <View style={{width: '100%', paddingHorizontal: 15, marginBottom: 20}}>
-        <Image  source={require('../../assets/logo.png')}/>
-        <Text style={{color: colors.SECONDARY, fontSize: 25, fontWeight: 'bold', paddingVertical:5 }}>Welcome!</Text>
-        <Text style={{color: colors.CONTRAST, fontSize: 16, fontWeight: 'bold', }}>
-          Let's get started by creating your account.
-        </Text>
-      </View>
+    
       <Form
         onSubmit={values => {
           console.log(values);
         }}
         initialValues={initialValues}
         validationSchema={signupSchema}>
-        <View style={styles.formContainer}>
+          <AuthFormContainer heading='Welcome!'
+          subHeading="Let's get started by creating your account."
+          >
+          <View style={styles.formContainer}>
           <AuthInputField
             name="name"
             placeholder="John Doe"
@@ -100,21 +92,17 @@ const SignUp: FC<Props> = props => {
             <AppLink title="Sign in" />
           </View>
         </View>
+          </AuthFormContainer>
       </Form>
-    </SafeAreaView>
+
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.PRIMARY,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
   formContainer: {
     width: '100%',
-    paddingHorizontal: 15, // padding in the x direction (left and right)
+   
   },
   marginBottom: {
     marginBottom: 20,
