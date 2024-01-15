@@ -1,13 +1,14 @@
 import AuthInputField from '@components/form/AuthInputField';
 import Form from '@components/form';
 import colors from '@utils/colors';
-import { FC, useState } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import {FC, useState} from 'react';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import * as yup from 'yup';
 import SubmitBtn from '@components/form/SumitBtn';
-import Icon from 'react-native-vector-icons/Entypo'
+import Icon from 'react-native-vector-icons/Entypo';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
+import { ColorSpace } from 'react-native-reanimated';
 
 const signupSchema = yup.object({
   name: yup
@@ -40,22 +41,52 @@ const initialValues = {
 };
 
 const SignUp: FC<Props> = props => {
-
   const [secureEntry, setSecureEntry] = useState(true);
 
   const togglePasswordView = () => {
-    setSecureEntry(!secureEntry)
-  }
+    setSecureEntry(!secureEntry);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
+      <View
+        style={{
+          width: 200,
+          height: 200,
+          position: 'absolute',
+          top: -200 / 2,
+          left: -200 / 2,
+        }}>
+        <View
+          style={{
+            width: 200,
+            height: 200,
+            borderRadius: 200 / 2,
+            backgroundColor: colors.SECONDARY,
+            opacity: 0.3,
+          }}/>
+           <View 
+            style={{
+              width: 200/1.5,
+              height: 200/1.5,
+              borderRadius: 200 / 2,
+              backgroundColor: colors.SECONDARY,
+              opacity: 0.3,
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: [{translateX: -200/3}, {translateY: -200/3}]
+          }}
+          />
+           
+  
+      </View>
       <Form
         onSubmit={values => {
           console.log(values);
         }}
         initialValues={initialValues}
-        validationSchema={signupSchema}
-      >
+        validationSchema={signupSchema}>
         <View style={styles.formContainer}>
           <AuthInputField
             name="name"
@@ -81,12 +112,11 @@ const SignUp: FC<Props> = props => {
             rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
             onRightIconPress={togglePasswordView}
           />
-          <SubmitBtn title="Sign Up"/>
+          <SubmitBtn title="Sign Up" />
           <View style={styles.linkContainer}>
-            <AppLink title= "I lost My Password"/>
-            <AppLink title='Sign in'/>
+            <AppLink title="I lost My Password" />
+            <AppLink title="Sign in" />
           </View>
-          
         </View>
       </Form>
     </SafeAreaView>
@@ -111,8 +141,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 });
 
 export default SignUp;
