@@ -75,7 +75,7 @@ const SignUp: FC<Props> = props => {
   ) => {
     try {
       // we want to send these information to our api
-      const response = await axios.post('http://localhost:8989/auth/create', {
+      const response = await axios.post('http://192.168.3.159:8989/auth/create', {
         ...values,
       });
 
