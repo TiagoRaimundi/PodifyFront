@@ -2,16 +2,20 @@ import AuthInputField from '@components/form/AuthInputField';
 import Form from '@components/form';
 import colors from '@utils/colors';
 import {FC, useState} from 'react';
-import {SafeAreaView, StyleSheet, View, Image, Text} from 'react-native';
+import {
+  Button,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import * as yup from 'yup';
 import SubmitBtn from '@components/form/SumitBtn';
-import Icon from 'react-native-vector-icons/Entypo';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
-import { ColorSpace } from 'react-native-reanimated';
 import CircleUi from '@ui/CircleUi';
 import AuthFormContainer from '@components/AuthFormContainer';
-
 
 const signupSchema = yup.object({
   name: yup
@@ -29,7 +33,7 @@ const signupSchema = yup.object({
     .trim('Password is missing!')
     .min(8, 'Password is too short!')
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[a-zA-Z\d!@#\$%\^&\*]+$/,
       'Password is too simple!',
     )
     .required('Password is required!'),
@@ -51,17 +55,16 @@ const SignUp: FC<Props> = props => {
   };
 
   return (
-    
-      <Form
-        onSubmit={values => {
-          console.log(values);
-        }}
-        initialValues={initialValues}
-        validationSchema={signupSchema}>
-          <AuthFormContainer heading='Welcome!'
-          subHeading="Let's get started by creating your account."
-          >
-          <View style={styles.formContainer}>
+    <Form
+      onSubmit={values => {
+        console.log(values);
+      }}
+      initialValues={initialValues}
+      validationSchema={signupSchema}>
+      <AuthFormContainer
+        heading="Welcome!"
+        subHeading="Let's get started by creating your account.">
+        <View style={styles.formContainer}>
           <AuthInputField
             name="name"
             placeholder="John Doe"
@@ -86,23 +89,21 @@ const SignUp: FC<Props> = props => {
             rightIcon={<PasswordVisibilityIcon privateIcon={secureEntry} />}
             onRightIconPress={togglePasswordView}
           />
-          <SubmitBtn title="Sign Up" />
+          <SubmitBtn title="Sign up" />
+
           <View style={styles.linkContainer}>
-            <AppLink title="I lost My Password" />
+            <AppLink title="I Lost My Password" />
             <AppLink title="Sign in" />
           </View>
         </View>
-          </AuthFormContainer>
-      </Form>
-
+      </AuthFormContainer>
+    </Form>
   );
 };
 
 const styles = StyleSheet.create({
-
   formContainer: {
     width: '100%',
-   
   },
   marginBottom: {
     marginBottom: 20,

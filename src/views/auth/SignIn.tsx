@@ -1,14 +1,14 @@
 import AuthInputField from '@components/form/AuthInputField';
 import Form from '@components/form';
 import {FC, useState} from 'react';
-import {StyleSheet, View, Image, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import * as yup from 'yup';
 import SubmitBtn from '@components/form/SumitBtn';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
 import AuthFormContainer from '@components/AuthFormContainer';
 
-const SignInSchema = yup.object({
+const signinSchema = yup.object({
   email: yup
     .string()
     .trim('Email is missing!')
@@ -41,7 +41,7 @@ const SignIn: FC<Props> = props => {
         console.log(values);
       }}
       initialValues={initialValues}
-      validationSchema={SignInSchema}>
+      validationSchema={signinSchema}>
       <AuthFormContainer heading="Welcome back!">
         <View style={styles.formContainer}>
           <AuthInputField
@@ -63,8 +63,9 @@ const SignIn: FC<Props> = props => {
             onRightIconPress={togglePasswordView}
           />
           <SubmitBtn title="Sign in" />
+
           <View style={styles.linkContainer}>
-            <AppLink title="I lost My Password" />
+            <AppLink title="I Lost My Password" />
             <AppLink title="Sign up" />
           </View>
         </View>
