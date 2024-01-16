@@ -4,7 +4,7 @@ import Verification from "@views/auth/Verification";
 
 
 const App = () => {
-  return <Verification/>
+  return <SignIn/>
 };
 
 export default App;

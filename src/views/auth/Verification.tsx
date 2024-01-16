@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef, useState} from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {Keyboard, StyleSheet, TextInput, View} from 'react-native';
 import AppLink from '@ui/AppLink';
 import AuthFormContainer from '@components/AuthFormContainer';
 import OTPField from '@ui/OTPField';
@@ -30,6 +30,18 @@ const Verification: FC<Props> = props => {
 
     setOtp([...newOtp]);
   };
+  
+  const handlePaste = (value: string) => {
+    if(value.length === 6){
+      Keyboard.dismiss()
+      const newOtp = value.split('')
+      setOtp([...newOtp])
+    }
+  }
+  
+  const handleSubmit = () => {
+    console.log(otp)
+  }
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -40,6 +52,7 @@ const Verification: FC<Props> = props => {
       <View style={styles.inputContainer}>
         {otpFields.map((_, index) => {
           return (
+            
             <OTPField
               ref={activeOtpIndex === index ? inputRef : null}
               key={index}
@@ -48,12 +61,15 @@ const Verification: FC<Props> = props => {
                 handleChange(nativeEvent.key, index);
                 
               }}
+              onChangeText={handlePaste}
+              keyboardType='numeric'
+              value={otp[index] || ''}
             />
           );
         })}
       </View>
 
-      <AppButton title="Submit" />
+      <AppButton title="Submit" onPress={handleSubmit}/>
 
       <View style={styles.linkContainer}>
         <AppLink title="Re-send OTP" />
