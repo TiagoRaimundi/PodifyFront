@@ -24,6 +24,7 @@ import {
 import {AuthStackParamList} from 'src/@types/navigation';
 import {FormikHelpers} from 'formik';
 import axios from 'axios';
+import client from 'src/api/client';
 
 const signupSchema = yup.object({
   name: yup
@@ -75,11 +76,13 @@ const SignUp: FC<Props> = props => {
   ) => {
     try {
       // we want to send these information to our api
-      const response = await axios.post('http://192.168.3.159:8989/auth/create', {
+      const {data} = await client.post('/auth/create', {
+        
         ...values,
+
       });
 
-      console.log(response);
+      console.log(data);
     } catch (error) {
       console.log('Sign up error: ', error);
     }
