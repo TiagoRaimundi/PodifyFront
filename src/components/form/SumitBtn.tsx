@@ -5,6 +5,7 @@ import React, { FC } from 'react';
 
 interface Props {
     title: string;
+   
 }
 
 const SubmitBtn: FC<Props> = props => {
@@ -12,7 +13,7 @@ const SubmitBtn: FC<Props> = props => {
 
 
 
-    return <AppButton onPress={handleSubmit} title={props.title} />;
+    return <AppButton busy onPress={handleSubmit} title={props.title} />;
 }
 
 export default SubmitBtn;
