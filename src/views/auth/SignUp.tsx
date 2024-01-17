@@ -50,9 +50,9 @@ const signupSchema = yup.object({
 
 interface Props {}
 interface NewUser {
-  name: '';
-  email: '';
-  password: '';
+  name: string;
+  email: string;
+  password: string;
 }
 
 const initialValues = {
@@ -77,12 +77,12 @@ const SignUp: FC<Props> = props => {
     try {
       // we want to send these information to our api
       const {data} = await client.post('/auth/create', {
-        
+
         ...values,
 
       });
 
-      console.log(data);
+      navigation.navigate('Verification', {userInfo: data.user})
     } catch (error) {
       console.log('Sign up error: ', error);
     }
