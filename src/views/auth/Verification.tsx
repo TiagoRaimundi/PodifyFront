@@ -17,6 +17,8 @@ const Verification: FC<Props> = ({route}) => {
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   const [otp, setOtp] = useState([...otpFields]);
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+
 
   const {userInfo} = route.params
 
@@ -52,7 +54,7 @@ const Verification: FC<Props> = ({route}) => {
 
   const handleSubmit = async () => {
     if(!isValidOtp) return;
-
+  
     try {
       const {data} = await client.post('/auth/verify-email', {userId: userInfo.id, token: otp.join('')})
       //navigate back to sign in
@@ -61,6 +63,7 @@ const Verification: FC<Props> = ({route}) => {
       console.log("Error inside Verification: ", error)
       
     }
+    setSubmitting(false)
    
   }
 
@@ -90,7 +93,7 @@ const Verification: FC<Props> = ({route}) => {
         })}
       </View>
 
-      <AppButton title="Submit" onPress={handleSubmit}/>
+      <AppButton busy={submitting} title="Submit" onPress={handleSubmit}/>
 
       <View style={styles.linkContainer}>
         <AppLink title="Re-send OTP" />

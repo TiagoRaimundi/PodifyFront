@@ -74,6 +74,7 @@ const SignUp: FC<Props> = props => {
     values: NewUser,
     actions: FormikHelpers<NewUser>,
   ) => {
+    actions.setSubmitting(true)
     try {
       // we want to send these information to our api
       const {data} = await client.post('/auth/create', {
@@ -86,6 +87,8 @@ const SignUp: FC<Props> = props => {
     } catch (error) {
       console.log('Sign up error: ', error);
     }
+
+    actions.setSubmitting(false)
   };
 
   return (
