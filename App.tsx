@@ -3,9 +3,9 @@ import AuthNavigator from "src/navigation/AuthNavigation";
 
 
 const App = () => {
-  return <NavigationContainer>
+  return( <NavigationContainer>
           <AuthNavigator/>
-  </NavigationContainer>
+  </NavigationContainer>)
 };
 
 export default App;
