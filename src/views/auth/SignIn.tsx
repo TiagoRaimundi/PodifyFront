@@ -7,10 +7,12 @@ import SubmitBtn from '@components/form/SumitBtn';
 import PasswordVisibilityIcon from '@ui/PasswordVisibilityIcon';
 import AppLink from '@ui/AppLink';
 import AuthFormContainer from '@components/AuthFormContainer';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AuthStackParamList } from 'src/@types/navigation';
-import { FormikHelpers } from 'formik';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AuthStackParamList} from 'src/@types/navigation';
+import {FormikHelpers} from 'formik';
 import client from 'src/api/client';
+import {updateLoggedInState, updateProfile} from 'src/store/auth';
+import {useDispatch} from 'react-redux';
 
 const signinSchema = yup.object({
   email: yup
@@ -27,7 +29,7 @@ const signinSchema = yup.object({
 
 interface Props {}
 
-interface SignInUserInfo  {
+interface SignInUserInfo {
   email: string;
   password: string;
 }
@@ -39,10 +41,8 @@ const initialValues = {
 
 const SignIn: FC<Props> = props => {
   const [secureEntry, setSecureEntry] = useState(true);
-
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
-  
-
+  const dispatch = useDispatch();
 
   const togglePasswordView = () => {
     setSecureEntry(!secureEntry);
@@ -52,22 +52,21 @@ const SignIn: FC<Props> = props => {
     values: SignInUserInfo,
     actions: FormikHelpers<SignInUserInfo>,
   ) => {
-    actions.setSubmitting(true)
+    actions.setSubmitting(true);
     try {
       // we want to send these information to our api
       const {data} = await client.post('/auth/sign-in', {
         ...values,
       });
 
-      console.log(data)
+      dispatch(updateProfile(data.profile));
+      dispatch(updateLoggedInState(true));
     } catch (error) {
       console.log('Sign in error: ', error);
     }
 
-    actions.setSubmitting(false)
+    actions.setSubmitting(false);
   };
-
-
 
   return (
     <Form
@@ -97,14 +96,16 @@ const SignIn: FC<Props> = props => {
           <SubmitBtn title="Sign in" />
 
           <View style={styles.linkContainer}>
-            <AppLink title="I Lost My Password" 
-            onPress={() => {
-              navigation.navigate("LostPassword");
-            }}/>
+            <AppLink
+              title="I Lost My Password"
+              onPress={() => {
+                navigation.navigate('LostPassword');
+              }}
+            />
             <AppLink
               title="Sign up"
               onPress={() => {
-                navigation.navigate("SignUp");
+                navigation.navigate('SignUp');
               }}
             />
           </View>

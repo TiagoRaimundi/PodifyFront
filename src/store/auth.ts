@@ -1,5 +1,4 @@
-import {createSlice, PayloadAction, createSelector} from '@reduxjs/toolkit';
-import { getReduceMotionFromConfig } from 'react-native-reanimated/lib/typescript/reanimated2/animation/util';
+import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
 import { RootState } from '.';
 
 export interface UserProfile {
@@ -11,6 +10,7 @@ export interface UserProfile {
   followers: number;
   followings: number;
 }
+
 interface AuthState {
   profile: UserProfile | null;
   loggedIn: boolean;
@@ -21,26 +21,32 @@ const initialState: AuthState = {
   loggedIn: false,
 };
 
-const slice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    updateProfile(authState, {payload}: PayloadAction<UserProfile | null>) {
-      authState.profile = payload;
+    updateProfile(state, action: PayloadAction<UserProfile | null>) {
+      state.profile = action.payload;
     },
-    updateLoggedInState(authState, {payload}) {
-      authState.loggedIn = payload;
+    updateLoggedInState(state, action: PayloadAction<boolean>) {
+      state.loggedIn = action.payload;
     },
   },
 });
 
-export const {updateLoggedInState, updateProfile} = slice.actions;
+export const { updateProfile, updateLoggedInState } = authSlice.actions;
 
-export const getAuthState = createSelector(
-    (state: RootState) => state,
-     authState => authState,
-     
+// Ajuste este seletor para corresponder à localização do AuthState no seu RootState
+export const getAuthState = (state: RootState) => state.auth;
 
-)
+export const selectLoggedInStatus = createSelector(
+  [getAuthState],
+  (authState) => authState.loggedIn
+);
 
-export default slice.reducer;
+export const selectUserProfile = createSelector(
+  [getAuthState],
+  (authState) => authState.profile
+);
+
+export default authSlice.reducer;
