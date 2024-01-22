@@ -14,27 +14,33 @@ export interface UserProfile {
 interface AuthState {
   profile: UserProfile | null;
   loggedIn: boolean;
+  busy: boolean;
 }
 
 const initialState: AuthState = {
   profile: null,
   loggedIn: false,
+  busy: false, 
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    updateProfile(state, action: PayloadAction<UserProfile | null>) {
-      state.profile = action.payload;
+    updateProfile(authState, {payload}: PayloadAction<UserProfile | null>) {
+      authState.profile = payload;
     },
-    updateLoggedInState(state, action: PayloadAction<boolean>) {
-      state.loggedIn = action.payload;
+    updateLoggedInState(authState, {payload}: PayloadAction<boolean>) {
+      authState.loggedIn = payload;
+    },
+    updateBusyInState(authState, {payload}: PayloadAction<boolean>) {
+      authState.busy = payload;
     },
   },
 });
 
-export const { updateProfile, updateLoggedInState } = authSlice.actions;
+export const { updateProfile, updateLoggedInState, updateBusyInState
+ } = authSlice.actions;
 
 // Ajuste este seletor para corresponder à localização do AuthState no seu RootState
 export const getAuthState = (state: RootState) => state.auth;
