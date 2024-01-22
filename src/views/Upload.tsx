@@ -1,3 +1,4 @@
+import CategorySelector from '@components/CategorySelector';
 import FileSelector from '@components/FileSelector';
 import AppButton from '@ui/AppButton';
 import colors from '@utils/colors';
@@ -45,6 +46,8 @@ const Upload: FC<Props> = props => {
           numberOfLines={10}
           multiline
         />
+
+        <CategorySelector visible title='Category'/>
         <AppButton borderRadius={7} title="Submit" />
       </View>
     </ScrollView>
