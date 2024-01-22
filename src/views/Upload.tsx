@@ -1,8 +1,8 @@
 import FileSelector from '@components/FileSelector';
+import AppButton from '@ui/AppButton';
 import colors from '@utils/colors';
 import {FC} from 'react';
-import {View, StyleSheet, Text, Pressable, TextInput} from 'react-native';
-import { ScrollView } from 'react-native-reanimated/lib/typescript/Animated';
+import {View, StyleSheet, Text, Pressable, TextInput, ScrollView} from 'react-native';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 interface Props {}
 
@@ -38,13 +38,14 @@ const Upload: FC<Props> = props => {
           placeholder="Title"
           style={styles.input}
         />
-         <TextInput
+        <TextInput
           placeholderTextColor={colors.CONTRAST}
           placeholder="About"
           style={styles.input}
           numberOfLines={10}
           multiline
         />
+        <AppButton borderRadius={7} title="Submit" />
       </View>
     </ScrollView>
   );
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: colors.CONTRAST,
     marginBottom: 20,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
   },
 });
 
