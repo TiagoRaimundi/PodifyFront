@@ -1,28 +1,70 @@
 import colors from '@utils/colors';
-import {FC} from 'react';
-import {View, StyleSheet, Modal, Pressable, Text, ScrollView} from 'react-native';
+import {useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Modal,
+  Pressable,
+  Text,
+  ScrollView,
+} from 'react-native';
+import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-
-
-interface Props {
+interface Props<T> {
+  data: T[];
   visible?: boolean;
   title?: string;
+  renderItem(item: T): JSX.Element;
+  onSelect(item: T, index: number): void;
+  onRequestClose?(): void;
 }
 
-const CategorySelector: FC<Props> = ({title, visible = false}) => {
+const CategorySelector = <T extends any>({
+  data,
+  title,
+  visible = false,
+  renderItem,
+  onSelect,
+  onRequestClose,
+}: Props<T>) => {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const handleSelect = (item: T, index: number) => {
+    setSelectedIndex(index);
+    onSelect(item, index);
+    onRequestClose && onRequestClose();
+  };
+
   return (
-    <Modal visible={visible} transparent>
+    <Modal onRequestClose={onRequestClose} visible={visible} transparent>
       <Pressable style={styles.backdrop} />
+
       <View style={styles.modalContainer}>
         <View style={styles.modal}>
           <Text style={styles.title}>{title}</Text>
+
           <ScrollView>
-            <Pressable style={styles.selectorContainer}>
-                <MaterialComIcon name='radiobox-marked' color={colors.SECONDARY}/>
-                <Text style={{padding: 10}}>Business</Text>
-            </Pressable>
-            
+            {data.map((item, index) => {
+              return (
+                <Pressable
+                  onPress={() => handleSelect(item, index)}
+                  key={index}
+                  style={styles.selectorContainer}>
+                  {selectedIndex === index ? (
+                    <MaterialComIcon
+                      name="radiobox-marked"
+                      color={colors.SECONDARY}
+                    />
+                  ) : (
+                    <MaterialComIcon
+                      name="radiobox-blank"
+                      color={colors.SECONDARY}
+                    />
+                  )}
+                  {renderItem(item)}
+                </Pressable>
+              );
+            })}
           </ScrollView>
         </View>
       </View>
@@ -39,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparet',
   },
   modal: {
     width: '90%',
@@ -54,10 +96,10 @@ const styles = StyleSheet.create({
     color: colors.PRIMARY,
     paddingVertical: 10,
   },
-  selectorContainer:{
+  selectorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-  }
+  },
 });
 
 export default CategorySelector;

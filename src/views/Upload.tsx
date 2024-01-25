@@ -47,7 +47,10 @@ const Upload: FC<Props> = props => {
           multiline
         />
 
-        <CategorySelector visible title='Category'/>
+        <CategorySelector visible title='Category'data={["Business"]} renderItem={(item) => {
+          return <Text style={styles.category}>{item}</Text>
+
+        }}/>
         <AppButton borderRadius={7} title="Submit" />
       </View>
     </ScrollView>
@@ -73,6 +76,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlignVertical: 'top',
   },
+  category: {
+    padding: 10,
+  }
 });
 
 export default Upload;
