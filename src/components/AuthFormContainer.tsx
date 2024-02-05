@@ -2,12 +2,12 @@ import CircleUi from '@ui/CircleUi';
 import colors from '@utils/colors';
 import {FC, ReactNode} from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
-
 interface Props {
     children: ReactNode
     heading?: string
     subHeading?: string
 }
+
 
 const AuthFormContainer: FC<Props> = ({children, heading, subHeading}) => {
   return (
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     color: colors.SECONDARY,
     fontSize: 25,
     fontWeight: 'bold',
-    paddingVertical: 5
+    paddingVertical: 5,
   },
   subHeading: {
     color: colors.CONTRAST,
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 20
   }
-
 
 });
 

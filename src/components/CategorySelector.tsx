@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: colors.PRIMARY,
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   selectorContainer: {
     flexDirection: 'row',
