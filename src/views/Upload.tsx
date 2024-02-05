@@ -1,8 +1,8 @@
 import FileSelector from '@components/FileSelector';
+import AppButton from '@ui/AppButton';
 import colors from '@utils/colors';
 import {FC} from 'react';
 import {View, StyleSheet, Text, Pressable, TextInput, ScrollView} from 'react-native';
-
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {}
@@ -44,6 +44,8 @@ const Upload: FC<Props> = props => {
         style={styles.input} 
         numberOfLines={10}
         multiline/>
+
+        <AppButton borderRadius={7} title="Submit"/>
       </View>
     </ScrollView>
   );
