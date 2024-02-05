@@ -1,7 +1,7 @@
 import CategorySelector from '@components/CategorySelector';
 import FileSelector from '@components/FileSelector';
 import AppButton from '@ui/AppButton';
-import { categories } from '@utils/categories';
+import {categories} from '@utils/categories';
 import colors from '@utils/colors';
 import {FC, useState} from 'react';
 import {
@@ -12,6 +12,7 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
+import {types} from 'react-native-document-picker';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {}
@@ -19,8 +20,8 @@ interface Props {}
 const Upload: FC<Props> = props => {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [audioInfo, setAudioInfo] = useState({
-    category: ''
-  })
+    category: '',
+  });
 
   return (
     <ScrollView style={styles.container}>
@@ -34,6 +35,10 @@ const Upload: FC<Props> = props => {
             />
           }
           btnTitle="Select Poster"
+          options={{type: [types.images]}}
+          onSelect={file => {
+            console.log(file);
+          }}
         />
         <FileSelector
           icon={
@@ -45,6 +50,10 @@ const Upload: FC<Props> = props => {
           }
           btnTitle="Select Audio"
           style={{marginLeft: 20}}
+          options={{type: [types.audio]}}
+          onSelect={file => {
+            console.log(file);
+          }}
         />
       </View>
 
@@ -54,12 +63,16 @@ const Upload: FC<Props> = props => {
           placeholder="Title"
           style={styles.input}
         />
-        <Pressable onPress={() => {
-          setShowCategoryModal(true)
-        }} style={styles.categorySelector}>
+
+        <Pressable
+          onPress={() => {
+            setShowCategoryModal(true);
+          }}
+          style={styles.categorySelector}>
           <Text style={styles.categorySelectorTitle}>Category</Text>
           <Text style={styles.selectedCategory}>{audioInfo.category}</Text>
         </Pressable>
+
         <TextInput
           placeholderTextColor={colors.INACTIVE_CONTRAST}
           placeholder="About"
@@ -79,10 +92,12 @@ const Upload: FC<Props> = props => {
             return <Text style={styles.category}>{item}</Text>;
           }}
           onSelect={item => {
-            setAudioInfo({category: item})
+            setAudioInfo({category: item});
           }}
         />
+
         <View style={{marginBottom: 20}} />
+
         <AppButton borderRadius={7} title="Submit" />
       </View>
     </ScrollView>
@@ -106,13 +121,11 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     color: colors.CONTRAST,
-
     textAlignVertical: 'top',
   },
   category: {
     padding: 10,
     color: colors.PRIMARY,
-    
   },
   categorySelector: {
     flexDirection: 'row',
@@ -122,11 +135,11 @@ const styles = StyleSheet.create({
   categorySelectorTitle: {
     color: colors.CONTRAST,
   },
-  selectedCategory:{
+  selectedCategory: {
     color: colors.SECONDARY,
     marginLeft: 5,
     fontStyle: 'italic',
-  }
+  },
 });
 
 export default Upload;
