@@ -1,13 +1,23 @@
+import CategorySelector from '@components/CategorySelector';
 import FileSelector from '@components/FileSelector';
 import AppButton from '@ui/AppButton';
 import colors from '@utils/colors';
-import {FC} from 'react';
-import {View, StyleSheet, Text, Pressable, TextInput, ScrollView} from 'react-native';
+import {FC, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {}
 
 const Upload: FC<Props> = props => {
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.fileSelctorContainer}>
@@ -33,19 +43,37 @@ const Upload: FC<Props> = props => {
           style={{marginLeft: 20}}
         />
       </View>
+
       <View style={styles.formContainer}>
         <TextInput
-        placeholderTextColor={colors.INACTIVE_CONTRAST} 
-        placeholder="Title"
-        style={styles.input} />
+          placeholderTextColor={colors.INACTIVE_CONTRAST}
+          placeholder="Title"
+          style={styles.input}
+        />
         <TextInput
-        placeholderTextColor={colors.INACTIVE_CONTRAST} 
-        placeholder="About"
-        style={styles.input} 
-        numberOfLines={10}
-        multiline/>
+          placeholderTextColor={colors.INACTIVE_CONTRAST}
+          placeholder="About"
+          style={styles.input}
+          numberOfLines={10}
+          multiline
+        />
 
-        <AppButton borderRadius={7} title="Submit"/>
+        <CategorySelector
+          visible={showCategoryModal}
+          onRequestClose={() => {
+            setShowCategoryModal(false);
+          }}
+          title="Category"
+          data={['Business']}
+          renderItem={item => {
+            return <Text style={styles.category}>{item}</Text>;
+          }}
+          onSelect={item => {
+            console.log(item);
+          }}
+        />
+
+        <AppButton borderRadius={7} title="Submit" />
       </View>
     </ScrollView>
   );
@@ -69,7 +97,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.CONTRAST,
     marginBottom: 20,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
+  },
+  category: {
+    padding: 10,
   },
 });
 
