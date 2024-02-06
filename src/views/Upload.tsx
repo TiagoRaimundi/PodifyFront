@@ -1,6 +1,7 @@
 import CategorySelector from '@components/CategorySelector';
 import FileSelector from '@components/FileSelector';
 import AppButton from '@ui/AppButton';
+import Progress from '@ui/Progress';
 import {Keys, getFromAsyncStorage} from '@utils/asyncStorage';
 import {categories} from '@utils/categories';
 import colors from '@utils/colors';
@@ -171,8 +172,10 @@ const Upload: FC<Props> = props => {
           }}
         />
 
-        <View style={{marginBottom: 20}} />
-
+        <View style={{marginVertical: 20}}>
+          <Progress progress={50}/>
+        </View>
+        
         <AppButton borderRadius={7} title="Submit" onPress={handleUpload} />
       </View>
     </ScrollView>
