@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
-import { RootState } from '.';
+import {createSlice, PayloadAction, createSelector} from '@reduxjs/toolkit';
+import {RootState} from '.';
 
 export interface UserProfile {
   id: string;
@@ -20,7 +20,7 @@ interface AuthState {
 const initialState: AuthState = {
   profile: null,
   loggedIn: false,
-  busy: false, 
+  busy: false,
 };
 
 const authSlice = createSlice({
@@ -39,20 +39,23 @@ const authSlice = createSlice({
   },
 });
 
-export const { updateProfile, updateLoggedInState, updateBusyInState
- } = authSlice.actions;
+export const {updateProfile, updateLoggedInState, updateBusyInState} =
+  authSlice.actions;
 
 // Ajuste este seletor para corresponder à localização do AuthState no seu RootState
-export const getAuthState = (state: RootState) => state.auth;
+export const getAuthState = createSelector(
+  (state: RootState) => state,
+  ({auth}) => auth,
+);
 
 export const selectLoggedInStatus = createSelector(
   [getAuthState],
-  (authState) => authState.loggedIn
+  authState => authState.loggedIn,
 );
 
 export const selectUserProfile = createSelector(
   [getAuthState],
-  (authState) => authState.profile
+  authState => authState.profile,
 );
 
 export default authSlice.reducer;

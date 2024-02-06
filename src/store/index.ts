@@ -1,16 +1,14 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import authReducer from './auth';
-// Importe outros reducers aqui
+import notificationReducer from './notification';
 
-const rootReducer = combineReducers({
+const reducer = combineReducers({
   auth: authReducer,
-  // Adicione outros reducers aqui, por exemplo:
-  // user: userReducer,
-  // posts: postsReducer,
+  notification: notificationReducer,
 });
 
 const store = configureStore({
-  reducer: rootReducer,
+  reducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
