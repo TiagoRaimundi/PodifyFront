@@ -1,12 +1,13 @@
 import {FC, ReactNode} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
+import AppNotification from './form/AppNotification';
 
 interface Props {
   children: ReactNode;
 }
 
 const AppContainer: FC<Props> = ({children}) => {
-  return <SafeAreaView style={styles.container}>{children}</SafeAreaView>;
+  return <SafeAreaView style={styles.container}><AppNotification/>{children}</SafeAreaView>;
 };
 
 const styles = StyleSheet.create({

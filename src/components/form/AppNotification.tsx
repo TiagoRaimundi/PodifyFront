@@ -50,20 +50,17 @@ const AppNotification: FC<Props> = props => {
           duration: 150,
         });
   
-        dispatch(upldateNotification({ message: '', type: 'error' }));
+        dispatch(upldateNotification({ message: '', type}));
       }, 3000) as unknown as number; // Assegura que o retorno de setTimeout seja tratado como number.
     };
   
-    performAnimation();
+    if(message) performAnimation();
   
     return () => {
       clearTimeout(timeoutId);
     };
   }, [message]);
   
- 
-  
-
   return (
     <Animated.View style={[styles.container, {backgroundColor}, heightStyle]}>
       <Text style={[styles.message, {color: textColor}]}>{message}</Text>
