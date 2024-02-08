@@ -23,8 +23,11 @@ import {
 } from '@react-navigation/native';
 import {AuthStackParamList} from 'src/@types/navigation';
 import {FormikHelpers} from 'formik';
-import axios from 'axios';
+import axios, {isAxiosError} from 'axios';
 import client from 'src/api/client';
+import catchAsyncError from 'src/api/catchError';
+import {useDispatch} from 'react-redux';
+import {upldateNotification} from 'src/store/notification';
 
 const signupSchema = yup.object({
   name: yup
@@ -65,6 +68,7 @@ const SignUp: FC<Props> = props => {
   const [secureEntry, setSecureEntry] = useState(true);
 
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  const dispatch = useDispatch();
 
   const togglePasswordView = () => {
     setSecureEntry(!secureEntry);
@@ -74,21 +78,20 @@ const SignUp: FC<Props> = props => {
     values: NewUser,
     actions: FormikHelpers<NewUser>,
   ) => {
-    actions.setSubmitting(true)
+    actions.setSubmitting(true);
     try {
       // we want to send these information to our api
       const {data} = await client.post('/auth/create', {
-
         ...values,
-
       });
 
-      navigation.navigate('Verification', {userInfo: data.user})
+      navigation.navigate('Verification', {userInfo: data.user});
     } catch (error) {
-      console.log('Sign up error: ', error);
+      const errorMessage = catchAsyncError(error);
+      dispatch(upldateNotification({message: errorMessage, type: 'error'}));
     }
 
-    actions.setSubmitting(false)
+    actions.setSubmitting(false);
   };
 
   return (
