@@ -4,8 +4,8 @@ import {Provider} from 'react-redux';
 import AppNavigator from 'src/navigation';
 import store from 'src/store';
 
+const queryClient = new QueryClient();
 const App = () => {
-  const queryClient = new QueryClient();
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
