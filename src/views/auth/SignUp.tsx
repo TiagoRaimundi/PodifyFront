@@ -27,7 +27,7 @@ import axios, {isAxiosError} from 'axios';
 import client from 'src/api/client';
 import catchAsyncError from 'src/api/catchError';
 import {useDispatch} from 'react-redux';
-import {upldateNotification} from 'src/store/notification';
+import {updateNotification} from 'src/store/notification';
 
 const signupSchema = yup.object({
   name: yup
@@ -88,7 +88,7 @@ const SignUp: FC<Props> = props => {
       navigation.navigate('Verification', {userInfo: data.user});
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(upldateNotification({message: errorMessage, type: 'error'}));
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
 
     actions.setSubmitting(false);

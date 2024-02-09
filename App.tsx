@@ -1,16 +1,18 @@
 import AppContainer from '@components/AppContainer';
-import {clearAsyncStorage} from '@utils/asyncStorage';
+import {QueryClient, QueryClientProvider} from 'react-query';
 import {Provider} from 'react-redux';
 import AppNavigator from 'src/navigation';
 import store from 'src/store';
 
 const App = () => {
-
+  const queryClient = new QueryClient();
   return (
     <Provider store={store}>
-      <AppContainer>
-        <AppNavigator />
-      </AppContainer>
+      <QueryClientProvider client={queryClient}>
+        <AppContainer>
+          <AppNavigator />
+        </AppContainer>
+      </QueryClientProvider>
     </Provider>
   );
 };

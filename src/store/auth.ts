@@ -43,10 +43,7 @@ export const {updateProfile, updateLoggedInState, updateBusyInState} =
   authSlice.actions;
 
 // Ajuste este seletor para corresponder à localização do AuthState no seu RootState
-export const getAuthState = createSelector(
-  (state: RootState) => state,
-  ({auth}) => auth,
-);
+export const getAuthState = (state: RootState) => state.auth;
 
 export const selectLoggedInStatus = createSelector(
   [getAuthState],

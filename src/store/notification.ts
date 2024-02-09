@@ -1,37 +1,41 @@
-import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {RootState} from '.';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '.';
 
-type notificationType = 'error' | 'success';
+type NotificationType = 'error' | 'success';
 
 interface Notification {
   message: string;
-  type: notificationType;
+  type: NotificationType;
 }
 
 const initialState: Notification = {
   message: '',
-  type: 'error',
+  type: 'error', // Tipo padrão de notificação
 };
 
-const slice = createSlice({
+const notificationSlice = createSlice({
   name: 'notification',
   initialState,
   reducers: {
-    upldateNotification(
-      notificationState,
-      {payload}: PayloadAction<Notification>,
+    // Correção do nome da ação de redutor para "updateNotification"
+    updateNotification(
+      state,
+      action: PayloadAction<Notification>,
     ) {
-      notificationState.message = payload.message;
-      notificationState.type = payload.type;
+      state.message = action.payload.message;
+      state.type = action.payload.type;
     },
   },
 });
 
+// Seletor para obter o estado da notificação
+// Se futuramente você quiser adicionar lógica de transformação, faça-a dentro do segundo argumento de createSelector.
 export const getNotificationState = createSelector(
   (state: RootState) => state.notification,
   notificationState => notificationState,
 );
 
-export const {upldateNotification} = slice.actions;
+// Exportando as ações e o redutor
+export const { updateNotification } = notificationSlice.actions;
 
-export default slice.reducer;
+export default notificationSlice.reducer;

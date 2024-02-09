@@ -11,7 +11,7 @@ import {AuthStackParamList} from 'src/@types/navigation';
 import {FormikHelpers} from 'formik';
 import client from 'src/api/client';
 import catchAsyncError from 'src/api/catchError';
-import {upldateNotification} from 'src/store/notification';
+import {updateNotification} from 'src/store/notification';
 import {useDispatch} from 'react-redux';
 
 const lostPasswordSchema = yup.object({
@@ -49,7 +49,7 @@ const LostPassword: FC<Props> = props => {
       console.log(data);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
-      dispatch(upldateNotification({message: errorMessage, type: 'error'}));
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
 
     actions.setSubmitting(false);
