@@ -1,32 +1,24 @@
 import {FC} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {useQuery} from 'react-query';
-import { useDispatch } from 'react-redux';
-import catchAsyncError from 'src/api/catchError';
-import client from 'src/api/client';
-import { updateNotification } from 'src/store/notification';
+import {useFetchLatestAudios} from 'src/hooks/query';
 
 interface Props {}
 
-const fetchLatest = async () => {
-  const {data} = await client('/audio/latest');
-  return data.audios
-};
-
 const Home: FC<Props> = props => {
-  const dispatch = useDispatch()
-  const query = useQuery(['latest-uploads'], {
-    queryFn: () => fetchLatest(),
-    onError(err){
-      const errorMessage = catchAsyncError(err)
-      dispatch(updateNotification({message: errorMessage, type: 'error'}))
-    },
-    
-  });
-  console.log(query)
+  const {data, isLoading} = useFetchLatestAudios();
+
+  if(isLoading)
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text style={{color: 'white', fontSize: 25}}>Loading</Text>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      {data?.map(item => {
+        return <Text key={item.id} style={{color: 'white', paddingVertical: 10}}>{item.title}</Text>
+      })}
     </View>
   );
 };
