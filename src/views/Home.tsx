@@ -1,8 +1,8 @@
 import PulseAnimationContainer from '@ui/PulseAnimationContainer';
+import colors from '@utils/colors';
 import {FC} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, Image, Pressable} from 'react-native';
 import {useFetchLatestAudios} from 'src/hooks/query';
-
 
 interface Props {}
 
@@ -10,27 +10,61 @@ const Home: FC<Props> = props => {
   const {data, isLoading} = useFetchLatestAudios();
 
   if (isLoading)
-  return (
-    <PulseAnimationContainer>
-      <Text style={{color: 'white', fontSize: 25}}>Loading</Text>
-    </PulseAnimationContainer>
-  );
+    return (
+      <PulseAnimationContainer>
+        <Text style={{color: 'white', fontSize: 25}}>Loading</Text>
+      </PulseAnimationContainer>
+    );
 
   return (
     <View style={styles.container}>
-      {data?.map(item => {
-        return (
-          <Text key={item.id} style={{color: 'white', paddingVertical: 10}}>
-            {item.title}
-          </Text>
-        );
-      })}
+      <Text
+        style={{
+          color: colors.CONTRAST,
+          fontSize: 20,
+          fontWeight: 'bold',
+          marginBottom: 15
+        }}>
+        Latest uploads
+      </Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {data?.map(item => {
+          return (
+            <Pressable onPress={() => {console.log('On audio press')
+          
+          }}
+
+          onLongPress={() => {console.log('On audio long press')}}
+            
+            style={{width: 100, marginRight: 15}} key={item.id}>
+              <Image
+                source={{uri: item.poster}}
+                style={{height: 100, aspectRatio: 1, borderRadius: 7}}
+              />
+              <Text
+                numberOfLines={2}
+                ellipsizeMode="tail"
+                key={item.id}
+                style={{
+                  color: colors.CONTRAST,
+                  fontWeight: '500',
+                  fontSize: 16,
+                  marginTop: 5,
+                }}>
+                {item.title}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    padding: 15
+  },
 });
 
 export default Home;
