@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction, createSelector} from '@reduxjs/toolkit';
+import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from '.';
 
 export interface UserProfile {
@@ -9,6 +9,9 @@ export interface UserProfile {
   avatar?: string;
   followers: number;
   followings: number;
+}
+interface LoginPayload {
+  profile: UserProfile;
 }
 
 interface AuthState {
@@ -23,36 +26,33 @@ const initialState: AuthState = {
   busy: false,
 };
 
-const authSlice = createSlice({
+const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     updateProfile(authState, {payload}: PayloadAction<UserProfile | null>) {
       authState.profile = payload;
     },
-    updateLoggedInState(authState, {payload}: PayloadAction<boolean>) {
+    updateLoggedInState(authState, {payload}) {
       authState.loggedIn = payload;
     },
-    updateBusyInState(authState, {payload}: PayloadAction<boolean>) {
+    updateBusyState(authState, {payload}: PayloadAction<boolean>) {
       authState.busy = payload;
+    },
+    loginSuccess(authState, action: PayloadAction<LoginPayload>) {
+      const {profile} = action.payload;
+      authState.profile = profile;
+      authState.loggedIn = true; 
     },
   },
 });
 
-export const {updateProfile, updateLoggedInState, updateBusyInState} =
-  authSlice.actions;
+export const {updateLoggedInState, updateProfile, updateBusyState, loginSuccess} =
+  slice.actions;
 
-// Ajuste este seletor para corresponder à localização do AuthState no seu RootState
-export const getAuthState = (state: RootState) => state.auth;
-
-export const selectLoggedInStatus = createSelector(
-  [getAuthState],
-  authState => authState.loggedIn,
+export const getAuthState = createSelector(
+  (state: RootState) => state,
+  ({auth}) => auth,
 );
 
-export const selectUserProfile = createSelector(
-  [getAuthState],
-  authState => authState.profile,
-);
-
-export default authSlice.reducer;
+export default slice.reducer;

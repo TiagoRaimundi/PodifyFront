@@ -1,40 +1,33 @@
-import PulseAnimationContainer from '@ui/PulseAnimationContainer';
-import {FC} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import {useQuery} from 'react-query';
-import {useDispatch} from 'react-redux';
-import catchAsyncError from 'src/api/catchError';
-import client from 'src/api/client';
-import {useFetchLatestAudios} from 'src/hooks/query';
-import {updateNotification} from 'src/store/notification';
+import {FC, ReactNode, useEffect} from 'react';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
 
-interface Props {}
+interface Props {
+  children: ReactNode;
+}
 
-const Home: FC<Props> = props => {
-  const {data, isLoading} = useFetchLatestAudios();
+const PulseAnimationContainer: FC<Props> = ({children}) => {
+  const oppacitySharedValue = useSharedValue(1);
 
-  // if (isLoading)
-  return (
-    <PulseAnimationContainer>
-      <Text style={{color: 'white', fontSize: 25}}>Loading</Text>
-    </PulseAnimationContainer>
-  );
+  const oppacity = useAnimatedStyle(() => {
+    return {
+      opacity: oppacitySharedValue.value,
+    };
+  });
 
-  return (
-    <View style={styles.container}>
-      {data?.map(item => {
-        return (
-          <Text key={item.id} style={{color: 'white', paddingVertical: 10}}>
-            {item.title}
-          </Text>
-        );
-      })}
-    </View>
-  );
+  useEffect(() => {
+    oppacitySharedValue.value = withRepeat(
+      withTiming(0.3, {duration: 1000}),
+      -1,
+      true,
+    );
+  }, []);
+
+  return <Animated.View style={oppacity}>{children}</Animated.View>;
 };
 
-const styles = StyleSheet.create({
-  container: {},
-});
-
-export default Home;
+export default PulseAnimationContainer;

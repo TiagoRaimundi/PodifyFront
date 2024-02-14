@@ -3,12 +3,13 @@ import {FC} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {useFetchLatestAudios} from 'src/hooks/query';
 
+
 interface Props {}
 
 const Home: FC<Props> = props => {
   const {data, isLoading} = useFetchLatestAudios();
-  //if(isLoading)
 
+  if (isLoading)
   return (
     <PulseAnimationContainer>
       <Text style={{color: 'white', fontSize: 25}}>Loading</Text>
@@ -18,7 +19,11 @@ const Home: FC<Props> = props => {
   return (
     <View style={styles.container}>
       {data?.map(item => {
-        return <Text key={item.id} style={{color: 'white', paddingVertical: 10}}>{item.title}</Text>
+        return (
+          <Text key={item.id} style={{color: 'white', paddingVertical: 10}}>
+            {item.title}
+          </Text>
+        );
       })}
     </View>
   );

@@ -9,7 +9,7 @@ import Animated, {
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getNotificationState,
-  upldateNotification,
+  updateNotification,
 } from 'src/store/notification';
 
 interface Props {}
@@ -50,7 +50,7 @@ const AppNotification: FC<Props> = props => {
           duration: 150,
         });
   
-        dispatch(upldateNotification({ message: '', type}));
+        dispatch(updateNotification({ message: '', type}));
       }, 3000) as unknown as number; // Assegura que o retorno de setTimeout seja tratado como number.
     };
   

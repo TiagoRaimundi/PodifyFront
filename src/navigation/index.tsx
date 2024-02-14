@@ -5,9 +5,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import client from 'src/api/client';
 import {
   getAuthState,
-  updateBusyInState,
+  updateBusyState,
   updateLoggedInState,
   updateProfile,
+  loginSuccess
 } from 'src/store/auth';
 import AuthNavigator from './AuthNavigation';
 import TabNavigator from './TabNavigator';
@@ -24,7 +25,7 @@ const AppTheme = {
     background: colors.PRIMARY,
     primary: colors.CONTRAST,
   },
-}
+};
 
 const AppNavigator: FC<Props> = props => {
   const {loggedIn, busy} = useSelector(getAuthState);
@@ -32,11 +33,11 @@ const AppNavigator: FC<Props> = props => {
 
   useEffect(() => {
     const fetchAuthInfo = async () => {
-      dispatch(updateBusyInState(true));
+      dispatch(updateBusyState(true));
       try {
         const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
         if (!token) {
-          return dispatch(updateBusyInState(false));
+          return dispatch(updateBusyState(false));
         }
 
         const {data} = await client.get('/auth/is-auth', {
@@ -44,16 +45,18 @@ const AppNavigator: FC<Props> = props => {
             Authorization: 'Bearer ' + token,
           },
         });
-
-        dispatch(updateProfile(data.profile));
+    
+        dispatch(loginSuccess({profile: data.profile }));
         dispatch(updateLoggedInState(true));
-
-        console.log('My auth profile:', data);
+     
+        dispatch(updateProfile(data.profile))
+     
+    
       } catch (error) {
         console.log('Auth error: ', error);
       }
 
-      dispatch(updateBusyInState(false));
+      dispatch(updateBusyState(false));
     };
 
     fetchAuthInfo();
@@ -61,7 +64,7 @@ const AppNavigator: FC<Props> = props => {
 
   return (
     <NavigationContainer theme={AppTheme}>
-      {busy ? ( 
+      {busy ? (
         <View
           style={{
             ...StyleSheet.absoluteFillObject,

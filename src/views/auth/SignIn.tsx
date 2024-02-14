@@ -70,7 +70,7 @@ const SignIn: FC<Props> = props => {
       const errorMessage = catchAsyncError(error)
       dispatch(updateNotification({message: errorMessage, type:'error'}))
     }
-
+ 
     actions.setSubmitting(false);
   };
 
