@@ -1,43 +1,47 @@
+import GridView from '@ui/GridView';
 import colors from '@utils/colors';
 import {FC} from 'react';
-import {View, StyleSheet, Text, Image} from 'react-native';
+import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
 import {useFetchRecommendedtAudios} from 'src/hooks/query';
 
 interface Props {}
 
 const RecommendedAudios: FC<Props> = props => {
   const {data, isLoading} = useFetchRecommendedtAudios();
-
-  console.log(data);
-
+ 
+  const getPoster = (poster ?: string) => {
+    return poster ? {uri: poster} : require('../assets/music.png');
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Latest Uploads</Text>
-      <View style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap'}}>
+      <GridView
+        col={3}
+        data={data || []}
+        renderItem={item => {
+          return (
+            <Pressable>
+              <Image source={getPoster(item.poster)} style={styles.poster} />
+              <Text
+                numberOfLines={2}
+                ellipsizeMode="tail"
+                style={styles.audioTitle}>
+                {item.title}
+              </Text>
+            </Pressable>
+          );
+        }}
+      />
+      {/* <View>
         {data?.map(item => {
           return (
             <View style={{width: '33.33%'}} key={item.id}>
               <View style={{padding: 5}}>
-                <Image
-                  source={{uri: item.poster}}
-                  style={{width: '100%', aspectRatio: 1, borderRadius: 7}}
-                />
-                <Text
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  style={{
-                    color: colors.CONTRAST,
-                    fontWeight: '500',
-                    fontSize: 16,
-                    marginTop: 5,
-                  }}>
-                  {item.title}
-                </Text>
               </View>
             </View>
           );
         })}
-      </View>
+    </View>*/}
     </View>
   );
 };
@@ -52,6 +56,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15,
   },
+  audioTitle: {
+    color: colors.CONTRAST,
+    fontWeight: '500',
+    fontSize: 16,
+    marginTop: 5,
+  },
+  poster: {width: '100%', aspectRatio: 1, borderRadius: 7},
 });
 
 export default RecommendedAudios;
