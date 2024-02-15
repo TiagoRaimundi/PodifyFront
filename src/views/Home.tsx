@@ -1,15 +1,54 @@
 import LatestUploads from '@components/LatestUploads';
 import OptionsModal from '@components/OptionsModal';
 import RecommendedAudios from '@components/RecommendedAudios';
+import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import colors from '@utils/colors';
 import {FC, useState} from 'react';
 import {View, StyleSheet, Pressable, Text} from 'react-native';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useDispatch} from 'react-redux';
+import {AudioData} from 'src/@types/audio';
+import catchAsyncError from 'src/api/catchError';
+import client from 'src/api/client';
+import {updateNotification} from 'src/store/notification';
 
 interface Props {}
 
 const Home: FC<Props> = props => {
   const [showOptions, setShowOptions] = useState(false);
+  const [selectedAudio, setSelectedAudio] = useState<AudioData>();
+
+  const dispatch = useDispatch();
+
+  const handleOnFavPress = async () => {
+    if (!selectedAudio) return;
+    // send request with the audio id that we want to add to fav
+
+    try {
+      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+
+      const {data} = await client.post(
+        '/favorite?audioId=' + selectedAudio.id,
+        null,
+        {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        },
+      );
+    } catch (error) {
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+    }
+
+    setSelectedAudio(undefined);
+    setShowOptions(false);
+  };
+
+  const handleOnLongPress = (audio: AudioData) => {
+    setSelectedAudio(audio);
+    setShowOptions(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -17,17 +56,13 @@ const Home: FC<Props> = props => {
         onAudioPress={item => {
           console.log(item);
         }}
-        onAudioLongPress={() => {
-          setShowOptions(true);
-        }}
+        onAudioLongPress={handleOnLongPress}
       />
       <RecommendedAudios
         onAudioPress={item => {
           console.log(item);
         }}
-        onAudioLongPress={() => {
-          setShowOptions(true);
-        }}
+        onAudioLongPress={handleOnLongPress}
       />
       <OptionsModal
         visible={showOptions}
@@ -36,11 +71,15 @@ const Home: FC<Props> = props => {
         }}
         options={[
           {title: 'Add to playlist', icon: 'playlist-music'},
-          {title: 'Add to favorite', icon: 'cards-heart'},
+          {
+            title: 'Add to favorite',
+            icon: 'cards-heart',
+            onPress: handleOnFavPress,
+          },
         ]}
         renderItem={item => {
           return (
-            <Pressable style={styles.optionContainer}>
+            <Pressable onPress={item.onPress} style={styles.optionContainer}>
               <MaterialComIcon
                 size={24}
                 color={colors.PRIMARY}
@@ -64,10 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
   },
-  optionLabel: {
-    color: colors.PRIMARY,
-    fontSize: 16,
-    marginLeft: 5},
+  optionLabel: {color: colors.PRIMARY, fontSize: 16, marginLeft: 5},
 });
 
 export default Home;
