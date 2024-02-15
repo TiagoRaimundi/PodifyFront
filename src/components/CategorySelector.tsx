@@ -1,3 +1,4 @@
+import BasicModalContainer from '@ui/BasicModalContainer';
 import colors from '@utils/colors';
 import {useState} from 'react';
 import {
@@ -36,39 +37,33 @@ const CategorySelector = <T extends any>({
   };
 
   return (
-    <Modal onRequestClose={onRequestClose} visible={visible} transparent>
+    <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
+      <Text style={styles.title}>{title}</Text>
 
-      <View style={styles.modalContainer}>
-      <Pressable onPress={onRequestClose} style={styles.backdrop} />
-        <View style={styles.modal}>
-          <Text style={styles.title}>{title}</Text>
-
-          <ScrollView>
-            {data.map((item, index) => {
-              return (
-                <Pressable
-                  onPress={() => handleSelect(item, index)}
-                  key={index}
-                  style={styles.selectorContainer}>
-                  {selectedIndex === index ? (
-                    <MaterialComIcon
-                      name="radiobox-marked"
-                      color={colors.SECONDARY}
-                    />
-                  ) : (
-                    <MaterialComIcon
-                      name="radiobox-blank"
-                      color={colors.SECONDARY}
-                    />
-                  )}
-                  {renderItem(item)}
-                </Pressable>
-              );
-            })}
-          </ScrollView>
-        </View>
-      </View>
-    </Modal>
+      <ScrollView>
+        {data.map((item, index) => {
+          return (
+            <Pressable
+              onPress={() => handleSelect(item, index)}
+              key={index}
+              style={styles.selectorContainer}>
+              {selectedIndex === index ? (
+                <MaterialComIcon
+                  name="radiobox-marked"
+                  color={colors.SECONDARY}
+                />
+              ) : (
+                <MaterialComIcon
+                  name="radiobox-blank"
+                  color={colors.SECONDARY}
+                />
+              )}
+              {renderItem(item)}
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </BasicModalContainer>
   );
 };
 
