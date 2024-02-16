@@ -1,6 +1,6 @@
 import LatestUploads from '@components/LatestUploads';
 import OptionsModal from '@components/OptionsModal';
-import PlaylistForm from '@components/PlaylistForm';
+import PlaylistForm, { PlaylistInfo } from '@components/PlaylistForm';
 import PlaylistModal from '@components/PlaylistModal';
 import RecommendedAudios from '@components/RecommendedAudios';
 import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
@@ -60,6 +60,30 @@ const Home: FC<Props> = props => {
     setShowPlaylistModal(true)
   };
 
+  const handlePlaylistSubmit = async (value: PlaylistInfo) => {
+    if(!value.title.trim()) return
+
+    try {
+    const token = await getFromAsyncStorage(Keys.AUTH_TOKEN)
+    const {data} = await client.post('/playlist/create', {
+      resId: selectedAudio?.id,
+      title: value.title,
+      visibility: value.private ? "private" : 'public'
+    }, {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    })
+    console.log(data)
+      
+    } catch (error) {
+      const errorMessage = catchAsyncError(error)
+      console.log(errorMessage)
+      
+    }
+
+  }
+
   return (
     <View style={styles.container}>
       <LatestUploads
@@ -110,9 +134,7 @@ const Home: FC<Props> = props => {
      />
      <PlaylistForm visible={showPlaylistForm} onRequestClose = {() => {
       setShowPlaylistForm(false)
-     }}onSubmit={value => {
-      console.log(value)
-     }}/>
+     }}onSubmit={handlePlaylistSubmit}/>
     </View>
   );
 };
