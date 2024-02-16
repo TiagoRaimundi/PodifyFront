@@ -1,5 +1,6 @@
 import LatestUploads from '@components/LatestUploads';
 import OptionsModal from '@components/OptionsModal';
+import PlaylistForm from '@components/PlaylistForm';
 import PlaylistModal from '@components/PlaylistModal';
 import RecommendedAudios from '@components/RecommendedAudios';
 import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
@@ -91,7 +92,7 @@ const Home: FC<Props> = props => {
           );
         }}
       />
-      <PlaylistModal visible list={[{title: 'Playlist one', visibility: 'private', id: '1'}, {title: 'Playlist two', visibility: 'public', id: '1'}]}/>
+     <PlaylistForm/>
     </View>
   );
 };
