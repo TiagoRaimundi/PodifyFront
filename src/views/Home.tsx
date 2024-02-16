@@ -110,6 +110,8 @@ const Home: FC<Props> = props => {
      />
      <PlaylistForm visible={showPlaylistForm} onRequestClose = {() => {
       setShowPlaylistForm(false)
+     }}onSubmit={value => {
+      console.log(value)
      }}/>
     </View>
   );
