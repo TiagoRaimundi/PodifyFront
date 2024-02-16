@@ -5,13 +5,14 @@ import PlaylistModal from '@components/PlaylistModal';
 import RecommendedAudios from '@components/RecommendedAudios';
 import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import colors from '@utils/colors';
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {View, StyleSheet, Pressable, Text} from 'react-native';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {AudioData} from 'src/@types/audio';
 import catchAsyncError from 'src/api/catchError';
 import client from 'src/api/client';
+import { useFetchPlaylist } from 'src/hooks/query';
 import {updateNotification} from 'src/store/notification';
 
 interface Props {}
@@ -22,6 +23,7 @@ const Home: FC<Props> = props => {
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [showPlaylistForm, setShowPlaylistForm] = useState(false);
   
+  const {data} = useFetchPlaylist()
 
   const dispatch = useDispatch();
 
@@ -126,7 +128,7 @@ const Home: FC<Props> = props => {
       />
      <PlaylistModal visible={showPlaylistModal} onRequestClose={() => {
       setShowPlaylistModal(false)
-     }} list={[]}
+     }} list={data ||  []}
      onCreateNewPress={() => {
       setShowPlaylistModal(false)
       setShowPlaylistForm(true)

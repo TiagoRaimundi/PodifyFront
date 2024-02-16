@@ -1,25 +1,11 @@
+import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import {useQuery} from 'react-query';
 import {useDispatch} from 'react-redux';
 import {AudioData} from 'src/@types/audio';
 import catchAsyncError from 'src/api/catchError';
 import client from 'src/api/client';
 import {updateNotification} from 'src/store/notification';
-
-const fetchRecommended = async (): Promise<AudioData[]> => {
-  const {data} = await client('/profile/recommended');
-  return data.audios;
-};
-
-export const useFetchRecommendedtAudios = () => {
-  const dispatch = useDispatch();
-  return useQuery(['recommended'], {
-    queryFn: () => fetchRecommended(),
-    onError(err) {
-      const errorMessage = catchAsyncError(err);
-      dispatch(updateNotification({message: errorMessage, type: 'error'}));
-    },
-  });
-};
+import {Playlist} from 'src/@types/audio';
 
 const fetchLatest = async (): Promise<AudioData[]> => {
   const {data} = await client('/audio/latest');
@@ -30,6 +16,43 @@ export const useFetchLatestAudios = () => {
   const dispatch = useDispatch();
   return useQuery(['latest-uploads'], {
     queryFn: () => fetchLatest(),
+    onError(err) {
+      const errorMessage = catchAsyncError(err);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+    },
+  });
+};
+
+const fetchRecommended = async (): Promise<AudioData[]> => {
+  const {data} = await client('/profile/recommended');
+  return data.audios;
+};
+
+export const useFetchRecommendedAudios = () => {
+  const dispatch = useDispatch();
+  return useQuery(['recommended'], {
+    queryFn: () => fetchRecommended(),
+    onError(err) {
+      const errorMessage = catchAsyncError(err);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+    },
+  });
+};
+
+const fetchPlaylist = async (): Promise<Playlist[]> => {
+  const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+  const {data} = await client('/playlist/by-profile', {
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+  });
+  return data.playlist;
+};
+
+export const useFetchPlaylist = () => {
+  const dispatch = useDispatch();
+  return useQuery(['playlist'], {
+    queryFn: () => fetchPlaylist(),
     onError(err) {
       const errorMessage = catchAsyncError(err);
       dispatch(updateNotification({message: errorMessage, type: 'error'}));

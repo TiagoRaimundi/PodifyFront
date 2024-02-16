@@ -4,7 +4,7 @@ import colors from '@utils/colors';
 import {FC} from 'react';
 import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
 import {AudioData} from 'src/@types/audio';
-import {useFetchRecommendedtAudios} from 'src/hooks/query';
+import {useFetchRecommendedAudios} from 'src/hooks/query';
 
 interface Props {
   onAudioPress(item: AudioData, data: AudioData[]): void;
@@ -13,7 +13,7 @@ interface Props {
 
 const dummyData = new Array(6).fill('');
 const RecommendedAudios: FC<Props> = ({onAudioLongPress, onAudioPress}) => {
-  const {data=[], isLoading} = useFetchRecommendedtAudios();
+  const {data=[], isLoading} = useFetchRecommendedAudios();
 
   const getPoster = (poster?: string) => {
     return poster ? {uri: poster} : require('../assets/music.png');
