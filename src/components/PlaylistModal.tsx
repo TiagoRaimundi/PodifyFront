@@ -11,6 +11,7 @@ interface Props {
   onRequestClose(): void;
   list: Playlist[]; 
   onCreateNewPress(): void
+  onPlaylistPress(item: Playlist): void
 }
 
 interface ListItemProps {
@@ -27,13 +28,14 @@ const ListItem: FC<ListItemProps> = ({title, icon, onPress}) => {
   );
 };
 
-const PlaylistModal: FC<Props> = ({list, visible, onRequestClose, onCreateNewPress}) => {
+const PlaylistModal: FC<Props> = ({list, visible, onRequestClose, onCreateNewPress, onPlaylistPress}) => {
   return (
     <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
       {/* we want to render playlists*/}
       <ScrollView>
         {list.map(item => {
             return  <ListItem
+            onPress={() => onPlaylistPress(item)}
             key={item.id}
             icon={
               <FontAwesomeIcon size={20} name={item.visibility === 'public' ? "globe": 'lock'} color={colors.PRIMARY} />
