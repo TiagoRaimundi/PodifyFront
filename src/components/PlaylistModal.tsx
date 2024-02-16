@@ -9,23 +9,25 @@ import { Playlist } from 'src/@types/audio';
 interface Props {
   visible: boolean;
   onRequestClose(): void;
-  list: Playlist[]
+  list: Playlist[]; 
+  onCreateNewPress(): void
 }
 
 interface ListItemProps {
   title: string;
   icon: ReactNode;
+  onPress?(): void 
 }
-const ListItem: FC<ListItemProps> = ({title, icon}) => {
+const ListItem: FC<ListItemProps> = ({title, icon, onPress}) => {
   return (
-    <Pressable style={styles.listItemContainer}>
+    <Pressable onPress={onPress} style={styles.listItemContainer}>
       {icon}
       <Text style={styles.listItemTitle}>{title}</Text>
     </Pressable>
   );
 };
 
-const PlaylistModal: FC<Props> = ({list, visible, onRequestClose}) => {
+const PlaylistModal: FC<Props> = ({list, visible, onRequestClose, onCreateNewPress}) => {
   return (
     <BasicModalContainer visible={visible} onRequestClose={onRequestClose}>
       {/* we want to render playlists*/}
@@ -44,13 +46,8 @@ const PlaylistModal: FC<Props> = ({list, visible, onRequestClose}) => {
       <ListItem
         icon={<AntDesign size={20} name="plus" color={colors.PRIMARY} />}
         title="Create new"
+        onPress={onCreateNewPress}
       />
-      <Pressable
-        style={{flexDirection: 'row', alignItems: 'center', height: 45}}>
-        <Text style={{fontSize: 16, color: colors.PRIMARY, marginLeft: 5}}>
-          Create New
-        </Text>
-      </Pressable>
     </BasicModalContainer>
   );
 };
