@@ -11,7 +11,7 @@ import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {AudioData, Playlist} from 'src/@types/audio';
 import catchAsyncError from 'src/api/catchError';
-import client from 'src/api/client';
+import { getClient } from 'src/api/client';
 import {useFetchPlaylist} from 'src/hooks/query';
 import {updateNotification} from 'src/store/notification';
 
@@ -32,16 +32,12 @@ const Home: FC<Props> = props => {
     // send request with the audio id that we want to add to fav
 
     try {
-      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+      
+      const client = await getClient()
 
       const {data} = await client.post(
-        '/favorite?audioId=' + selectedAudio.id,
-        null,
-        {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        },
+        '/favorite?audioId=' + selectedAudio.id
+    
       );
     } catch (error) {
       const errorMessage = catchAsyncError(error);
@@ -66,7 +62,7 @@ const Home: FC<Props> = props => {
     if (!value.title.trim()) return;
 
     try {
-      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+      const client = await getClient()
       const {data} = await client.post(
         '/playlist/create',
         {
@@ -74,11 +70,7 @@ const Home: FC<Props> = props => {
           title: value.title,
           visibility: value.private ? 'private' : 'public',
         },
-        {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        },
+    
       );
       console.log(data);
     } catch (error) {
@@ -89,7 +81,7 @@ const Home: FC<Props> = props => {
 
   const updatePlaylist = async (item: Playlist) => {
     try {
-      const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
+      const client = await getClient()
       const {data} = await client.patch(
         '/playlist',
         {
@@ -97,11 +89,6 @@ const Home: FC<Props> = props => {
           item: selectedAudio?.id,
           title: item.title,
           visibility: item.visibility,
-        },
-        {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
         },
       );
         setSelectedAudio(undefined)
