@@ -8,7 +8,7 @@ import {updateNotification} from 'src/store/notification';
 import {Playlist} from 'src/@types/audio';
 
 const fetchLatest = async (): Promise<AudioData[]> => {
-  const client = await getClient() 
+  const client = await getClient();
   const {data} = await client('/audio/latest');
   return data.audios;
 };
@@ -25,7 +25,7 @@ export const useFetchLatestAudios = () => {
 };
 
 const fetchRecommended = async (): Promise<AudioData[]> => {
-  const client = await getClient() 
+  const client = await getClient();
   const {data} = await client('/profile/recommended');
   return data.audios;
 };
@@ -42,9 +42,8 @@ export const useFetchRecommendedAudios = () => {
 };
 
 const fetchPlaylist = async (): Promise<Playlist[]> => {
-  const client = await getClient() 
-  const {data} = await client('/playlist/by-profile')
-  
+  const client = await getClient();
+  const {data} = await client('/playlist/by-profile');
   return data.playlist;
 };
 
@@ -59,10 +58,9 @@ export const useFetchPlaylist = () => {
   });
 };
 
-
-const fetchUploadsByProfile = async (): Promise<Playlist[]> => {
-  const client = await getClient() 
-  const {data} = await client('/profile/uploads', )
+const fetchUploadsByProfile = async (): Promise<AudioData[]> => {
+  const client = await getClient();
+  const {data} = await client('/profile/uploads');
   return data.audios;
 };
 
@@ -76,6 +74,3 @@ export const useFetchUploadsByProfile = () => {
     },
   });
 };
-
-
-

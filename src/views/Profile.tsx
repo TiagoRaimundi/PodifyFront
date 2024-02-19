@@ -22,6 +22,7 @@ const Profile: FC<Props> = props => {
       tabBarStyle: styles.tabbarStyle,
       tabBarLabelStyle: styles.tabBaeLabelStyle
     }}>
+      
       <Tab.Screen name='uploads' component={UploadsTab}/>
       <Tab.Screen name='Playlist' component={PlaylistTab}/>
       <Tab.Screen name='Favorite' component={FavoriteTab}/>
@@ -32,9 +33,11 @@ const Profile: FC<Props> = props => {
  
  const styles = StyleSheet.create({
    container: {
-    flex: 1
+    flex: 1,
+    padding: 10
    },
    tabbarStyle:{
+    marginBottom: 20,
     backgroundColor: 'tranparent',
     elevation: 0,
     shadowRadius: 0,
