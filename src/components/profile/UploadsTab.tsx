@@ -1,5 +1,6 @@
 import AudioListLoadingUI from '@ui/AudioListLoadingUI';
 import AudioListle from '@ui/AudioListle';
+import EmptyRecords from '@ui/EmptyRecords';
 import colors from '@utils/colors';
 import {FC} from 'react';
 import {
@@ -18,6 +19,8 @@ const UploadsTab: FC<Props> = props => {
   const {data, isLoading} = useFetchUploadsByProfile();
 
   if(isLoading) return <AudioListLoadingUI/>
+
+  if(!data?.length) return <EmptyRecords title="There is no audio!"/>
 
   return (
     <ScrollView style={styles.container}>
