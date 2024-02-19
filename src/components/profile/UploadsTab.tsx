@@ -1,3 +1,4 @@
+import AudioListLoadingUI from '@ui/AudioListLoadingUI';
 import AudioListle from '@ui/AudioListle';
 import colors from '@utils/colors';
 import {FC} from 'react';
@@ -15,6 +16,8 @@ interface Props {}
 
 const UploadsTab: FC<Props> = props => {
   const {data, isLoading} = useFetchUploadsByProfile();
+
+  if(isLoading) return <AudioListLoadingUI/>
 
   return (
     <ScrollView style={styles.container}>
