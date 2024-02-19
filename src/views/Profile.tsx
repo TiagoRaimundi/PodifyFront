@@ -6,13 +6,17 @@ import PlaylistTab from '@components/profile/PlaylistTab';
 import FavoriteTab from '@components/profile/FavoriteTab';
 import HistoryTab from '@components/profile/HistoryTab';
 import colors from '@utils/colors';
+import { useFetchUploadsByProfile } from 'src/hooks/query';
 
 
 const Tab = createMaterialTopTabNavigator()
 
 interface Props {}
 
-const Profile: FC<Props> = (props) => {
+const Profile: FC<Props> = props => {
+  const {data, isLoading} = useFetchUploadsByProfile()
+
+  console.log(data)
   return <View style={styles.container}>
     <Tab.Navigator screenOptions={{
       tabBarStyle: styles.tabbarStyle,

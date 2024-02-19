@@ -43,12 +43,8 @@ export const useFetchRecommendedAudios = () => {
 
 const fetchPlaylist = async (): Promise<Playlist[]> => {
   const client = await getClient() 
-  const token = await getFromAsyncStorage(Keys.AUTH_TOKEN);
-  const {data} = await client('/playlist/by-profile', {
-    headers: {
-      Authorization: 'Bearer ' + token,
-    },
-  });
+  const {data} = await client('/playlist/by-profile')
+  
   return data.playlist;
 };
 
@@ -62,3 +58,24 @@ export const useFetchPlaylist = () => {
     },
   });
 };
+
+
+const fetchUploadsByProfile = async (): Promise<Playlist[]> => {
+  const client = await getClient() 
+  const {data} = await client('/profile/uploads', )
+  return data.audios;
+};
+
+export const useFetchUploadsByProfile = () => {
+  const dispatch = useDispatch();
+  return useQuery(['uploads-by-profile'], {
+    queryFn: () => fetchUploadsByProfile(),
+    onError(err) {
+      const errorMessage = catchAsyncError(err);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+    },
+  });
+};
+
+
+
