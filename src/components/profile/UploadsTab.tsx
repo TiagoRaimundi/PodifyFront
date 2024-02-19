@@ -25,7 +25,7 @@ const UploadsTab: FC<Props> = props => {
   return (
     <ScrollView style={styles.container}>
       {data?.map(item => {
-        return ( <AudioListle audio={item}/>
+        return ( <AudioListle key={item.id} audio={item}/>
         );
       })}
     </ScrollView>
