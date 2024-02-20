@@ -5,6 +5,7 @@ import Profile from '@views/Profile';
 import Upload from '@views/Upload';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ProfileNavigatior from './ProfileNavigatior';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,8 +31,8 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="ProfileScreen"
-        component={Profile}
+        name="ProfileNavigator"
+        component={ProfileNavigatior}
         options={{
           tabBarIcon: props => {
             return (
