@@ -1,26 +1,40 @@
 import AppHeader from '@components/AppHeader';
 import AvatarField from '@ui/AvatarField';
 import colors from '@utils/colors';
-import {FC} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {View, StyleSheet, Text, Pressable, TextInput} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AppButton from '@ui/AppButton';
 import {getClient} from 'src/api/client';
 import catchAsyncError from 'src/api/catchError';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {updateNotification} from 'src/store/notification';
 import {Keys, removeFromAsyncStorage} from '@utils/asyncStorage';
 import {
+  getAuthState,
   updateBusyState,
   updateLoggedInState,
   updateProfile,
 } from 'src/store/auth';
+import deepEqual from 'deep-equal';
 
 interface Props {}
+interface ProfileInfo {
+  name: string;
+  avatar?: string;
+}
 
 const ProfileSettings: FC<Props> = props => {
+  const [userInfo, setUserInfo] = useState<ProfileInfo>({name: ''});
   const dispatch = useDispatch();
+  const {profile} = useSelector(getAuthState);
+
+  const isSame = deepEqual(userInfo, {
+    name: profile?.name,
+    avatar: profile?.avatar,
+  });
+
   const handleLogout = async (fromAll?: boolean) => {
     dispatch(updateBusyState(true));
     try {
@@ -37,6 +51,10 @@ const ProfileSettings: FC<Props> = props => {
     dispatch(updateBusyState(false));
   };
 
+  useEffect(() => {
+    if (profile) setUserInfo({name: profile.name, avatar: profile.avatar});
+  }, [profile]);
+
   return (
     <View style={styles.container}>
       <AppHeader title="Settings" />
@@ -47,14 +65,18 @@ const ProfileSettings: FC<Props> = props => {
 
       <View style={styles.settingOptionsContainer}>
         <View style={styles.avatarContainer}>
-          <AvatarField />
+          <AvatarField source={userInfo.avatar} />
           <Pressable style={styles.paddingLeft}>
             <Text style={styles.linkText}>Update Profile Image</Text>
           </Pressable>
         </View>
-        <TextInput style={styles.nameInput} value={'John'} />
+        <TextInput
+          onChangeText={text => setUserInfo({...userInfo, name: text})}
+          style={styles.nameInput}
+          value={userInfo.name}
+        />
         <View style={styles.emailContainer}>
-          <Text style={styles.email}>john@email.com</Text>
+          <Text style={styles.email}>{profile?.email}</Text>
           <MaterialIcon name="verified" size={15} color={colors.CONTRAST} />
         </View>
       </View>
@@ -73,9 +95,11 @@ const ProfileSettings: FC<Props> = props => {
           <Text style={styles.logoutBtnTitle}>Logout</Text>
         </Pressable>
       </View>
-      <View style={styles.marginTop}>
-        <AppButton title="update" borderRadius={7} />
-      </View>
+      {!isSame ? (
+        <View style={styles.marginTop}>
+          <AppButton title="update" borderRadius={7} />
+        </View>
+      ) : null}
     </View>
   );
 };
