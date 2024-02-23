@@ -2,7 +2,14 @@ import AppHeader from '@components/AppHeader';
 import AvatarField from '@ui/AvatarField';
 import colors from '@utils/colors';
 import {FC, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, Pressable, TextInput} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  TextInput,
+  PermissionsAndroid,
+} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AppButton from '@ui/AppButton';
@@ -89,9 +96,9 @@ const ProfileSettings: FC<Props> = props => {
         width: 300,
         height: 300,
       });
-      console.log(res)
+      console.log(res);
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
   };
 
