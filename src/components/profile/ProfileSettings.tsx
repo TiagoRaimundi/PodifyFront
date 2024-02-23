@@ -26,7 +26,7 @@ import {
 } from 'src/store/auth';
 import deepEqual from 'deep-equal';
 import ImagePicker from 'react-native-image-crop-picker';
-import { getPermissionToReadImages } from '@utils/helper';
+import {getPermissionToReadImages} from '@utils/helper';
 
 interface Props {}
 interface ProfileInfo {
@@ -73,6 +73,15 @@ const ProfileSettings: FC<Props> = props => {
         );
       const formData = new FormData();
       formData.append('name', userInfo.name);
+
+      if (userInfo.avatar) {
+        formData.append('avatar', {
+          name: 'avatar',
+          type: 'image/jpeg',
+          uri: userInfo.avatar
+        });
+      }
+      
       const client = await getClient({'Content-Type': 'multipart/form-data'});
       const {data} = await client.post('/auth/update-profile', formData);
       dispatch(updateProfile(data.profile));
@@ -92,14 +101,14 @@ const ProfileSettings: FC<Props> = props => {
 
   const handeImageSelecte = async () => {
     try {
-
-      await getPermissionToReadImages()
-      const res = await ImagePicker.openPicker({
+      await getPermissionToReadImages();
+      const {path} = await ImagePicker.openPicker({
         cropping: true,
         width: 300,
         height: 300,
       });
-      console.log(res);
+
+      setUserInfo({...userInfo, avatar: path});
     } catch (error) {
       console.log(error);
     }
