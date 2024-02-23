@@ -26,6 +26,7 @@ import {
 } from 'src/store/auth';
 import deepEqual from 'deep-equal';
 import ImagePicker from 'react-native-image-crop-picker';
+import { getPermissionToReadImages } from '@utils/helper';
 
 interface Props {}
 interface ProfileInfo {
@@ -91,6 +92,8 @@ const ProfileSettings: FC<Props> = props => {
 
   const handeImageSelecte = async () => {
     try {
+
+      await getPermissionToReadImages()
       const res = await ImagePicker.openPicker({
         cropping: true,
         width: 300,
