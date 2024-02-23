@@ -18,6 +18,7 @@ import {
   updateProfile,
 } from 'src/store/auth';
 import deepEqual from 'deep-equal';
+import ImagePicker from 'react-native-image-crop-picker';
 
 interface Props {}
 interface ProfileInfo {
@@ -67,13 +68,31 @@ const ProfileSettings: FC<Props> = props => {
       const client = await getClient({'Content-Type': 'multipart/form-data'});
       const {data} = await client.post('/auth/update-profile', formData);
       dispatch(updateProfile(data.profile));
-      dispatch(updateNotification({message: 'Your profile is updated', type: 'success'}));
+      dispatch(
+        updateNotification({
+          message: 'Your profile is updated',
+          type: 'success',
+        }),
+      );
       dispatch;
     } catch (error) {
       const errorMessage = catchAsyncError(error);
       dispatch(updateNotification({message: errorMessage, type: 'error'}));
     }
     setBusy(false);
+  };
+
+  const handeImageSelecte = async () => {
+    try {
+      const res = await ImagePicker.openPicker({
+        cropping: true,
+        width: 300,
+        height: 300,
+      });
+      console.log(res)
+    } catch (error) {
+        console.log(error)
+    }
   };
 
   useEffect(() => {
@@ -91,7 +110,7 @@ const ProfileSettings: FC<Props> = props => {
       <View style={styles.settingOptionsContainer}>
         <View style={styles.avatarContainer}>
           <AvatarField source={userInfo.avatar} />
-          <Pressable style={styles.paddingLeft}>
+          <Pressable onPress={handeImageSelecte} style={styles.paddingLeft}>
             <Text style={styles.linkText}>Update Profile Image</Text>
           </Pressable>
         </View>
