@@ -4,29 +4,39 @@ import AppLink from '@ui/AppLink';
 import AuthFormContainer from '@components/AuthFormContainer';
 import OTPField from '@ui/OTPField';
 import AppButton from '@ui/AppButton';
-import {AuthStackParamList, ProfileNavigatorStackParamList} from 'src/@types/navigation';
+import {
+  AuthStackParamList,
+  ProfileNavigatorStackParamList,
+} from 'src/@types/navigation';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import client from 'src/api/client';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import colors from '@utils/colors';
 import catchAsyncError from 'src/api/catchError';
 import {updateNotification} from 'src/store/notification';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-type Props = NativeStackScreenProps<AuthStackParamList | ProfileNavigatorStackParamList, 'Verification'
+type Props = NativeStackScreenProps<
+  AuthStackParamList | ProfileNavigatorStackParamList,
+  'Verification'
 >;
+
+type PossibleScreen = {
+  ProfileSeettings: undefined;
+  SignIn: undefined;
+};
 
 const otpFields = new Array(6).fill('');
 
 const Verification: FC<Props> = ({route}) => {
-  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
+  const navigation = useNavigation<NavigationProp<PossibleScreen>>();
   const [otp, setOtp] = useState([...otpFields]);
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [coundDown, setCoundDown] = useState(60);
   const [canSendNewOtpRequest, setCanSendNewOtpRequest] = useState(false);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const {userInfo} = route.params;
 
   const inputRef = useRef<TextInput>(null);
@@ -60,17 +70,30 @@ const Verification: FC<Props> = ({route}) => {
   });
 
   const handleSubmit = async () => {
-    if (!isValidOtp) return  dispatch(updateNotification({message: 'Invalid OTP!', type: 'error'}));
-    setSubmitting(true)
+    if (!isValidOtp)
+      return dispatch(
+        updateNotification({message: 'Invalid OTP!', type: 'error'}),
+      );
+    setSubmitting(true);
 
     try {
       const {data} = await client.post('/auth/verify-email', {
         userId: userInfo.id,
         token: otp.join(''),
       });
-      dispatch(updateNotification({message: data.message, type: 'success'}))
-      //navigate back to sign in
-      navigation.navigate('SignIn');
+      dispatch(updateNotification({message: data.message, type: 'success'}));
+
+      const {routeNames} = navigation.getState()
+
+      if (routeNames.includes('SignIn'))
+        //navigate back to sign in
+        navigation.navigate('SignIn');
+
+      if (routeNames.includes('ProfileSettings'))
+        //navigate back to sign in
+        navigation.navigate('ProfileSettings');
+
+        
     } catch (error) {
       const errorMessage = catchAsyncError(error);
       dispatch(updateNotification({message: errorMessage, type: 'error'}));
