@@ -12,7 +12,7 @@ interface Props {
   time?: number;
   activeAtFirst?: boolean;
   linkTitle: string;
-  userId: string;
+  userId?: string;
 }
 
 const ReVerificationLink: FC<Props> = ({
@@ -51,11 +51,13 @@ const ReVerificationLink: FC<Props> = ({
 
   useEffect(() => {
     if (canSendNewOtpRequest) return;
+
     const intervalId = setInterval(() => {
       setCoundDown(oldCountDown => {
         if (oldCountDown <= 0) {
           setCanSendNewOtpRequest(true);
           clearInterval(intervalId);
+
           return 0;
         }
         return oldCountDown - 1;
