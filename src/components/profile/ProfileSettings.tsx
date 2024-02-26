@@ -27,11 +27,13 @@ import {
 import deepEqual from 'deep-equal';
 import ImagePicker from 'react-native-image-crop-picker';
 import {getPermissionToReadImages} from '@utils/helper';
+import ReVerificationLink from '@components/ReVerificationLink';
 
 interface Props {}
 interface ProfileInfo {
   name: string;
   avatar?: string;
+  
 }
 
 const ProfileSettings: FC<Props> = props => {
@@ -78,10 +80,10 @@ const ProfileSettings: FC<Props> = props => {
         formData.append('avatar', {
           name: 'avatar',
           type: 'image/jpeg',
-          uri: userInfo.avatar
+          uri: userInfo.avatar,
         });
       }
-      
+
       const client = await getClient({'Content-Type': 'multipart/form-data'});
       const {data} = await client.post('/auth/update-profile', formData);
       dispatch(updateProfile(data.profile));
@@ -140,7 +142,11 @@ const ProfileSettings: FC<Props> = props => {
         />
         <View style={styles.emailContainer}>
           <Text style={styles.email}>{profile?.email}</Text>
-          <MaterialIcon name="verified" size={15} color={colors.CONTRAST} />
+          {profile?.verified ? (
+            <MaterialIcon name="verified" size={15} color={colors.CONTRAST} />
+          ) : (
+            <ReVerificationLink linkTitle="verify" activeAtFirst />
+          )}
         </View>
       </View>
 
