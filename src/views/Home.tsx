@@ -7,13 +7,14 @@ import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import colors from '@utils/colors';
 import {FC, useEffect, useState} from 'react';
 import {View, StyleSheet, Pressable, Text} from 'react-native';
-import TrackPlayer, { Track } from 'react-native-track-player';
+import TrackPlayer, {Track} from 'react-native-track-player';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {AudioData, Playlist} from 'src/@types/audio';
 import catchAsyncError from 'src/api/catchError';
 import {getClient} from 'src/api/client';
 import {useFetchPlaylist} from 'src/hooks/query';
+import useAudioController from 'src/hooks/useAudioController';
 import {updateNotification} from 'src/store/notification';
 
 interface Props {}
@@ -23,11 +24,9 @@ const Home: FC<Props> = props => {
   const [selectedAudio, setSelectedAudio] = useState<AudioData>();
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [showPlaylistForm, setShowPlaylistForm] = useState(false);
-
+  const {onAudioPress} = useAudioController();
   const {data} = useFetchPlaylist();
-
   const dispatch = useDispatch();
-
   const handleOnFavPress = async () => {
     if (!selectedAudio) return;
     // send request with the audio id that we want to add to fav
@@ -99,30 +98,13 @@ const Home: FC<Props> = props => {
 
     setupPlayer();
   }, []);
+
+  
   return (
     <View style={styles.container}>
-      <LatestUploads
-        onAudioPress={async (item, data) => {
-          const lists: Track[] = data.map(item => {
-            return {
-              id: item.id,
-              title: item.title,
-              url: item.file,
-              artwork: item.poster || require('../assets/music.png'),
-              artist: item.owner.name,
-              gender: item.category,
-              isLiveStream: true
-            }
-          });
-          await TrackPlayer.add([...lists]);
-          await TrackPlayer.play()
-        }}
-        onAudioLongPress={handleOnLongPress}
-      />
+      <LatestUploads onAudioPress={onAudioPress} onAudioLongPress={handleOnLongPress} />
       <RecommendedAudios
-        onAudioPress={item => {
-          console.log(item);
-        }}
+        onAudioPress={onAudioPress}
         onAudioLongPress={handleOnLongPress}
       />
       <OptionsModal
