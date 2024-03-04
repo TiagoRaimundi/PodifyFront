@@ -7,11 +7,12 @@ import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import colors from '@utils/colors';
 import {FC, useEffect, useState} from 'react';
 import {View, StyleSheet, Pressable, Text} from 'react-native';
+import TrackPlayer, { Track } from 'react-native-track-player';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {AudioData, Playlist} from 'src/@types/audio';
 import catchAsyncError from 'src/api/catchError';
-import { getClient } from 'src/api/client';
+import {getClient} from 'src/api/client';
 import {useFetchPlaylist} from 'src/hooks/query';
 import {updateNotification} from 'src/store/notification';
 
@@ -32,13 +33,9 @@ const Home: FC<Props> = props => {
     // send request with the audio id that we want to add to fav
 
     try {
-      
-      const client = await getClient()
+      const client = await getClient();
 
-      const {data} = await client.post(
-        '/favorite?audioId=' + selectedAudio.id
-    
-      );
+      const {data} = await client.post('/favorite?audioId=' + selectedAudio.id);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
       dispatch(updateNotification({message: errorMessage, type: 'error'}));
@@ -62,16 +59,12 @@ const Home: FC<Props> = props => {
     if (!value.title.trim()) return;
 
     try {
-      const client = await getClient()
-      const {data} = await client.post(
-        '/playlist/create',
-        {
-          resId: selectedAudio?.id,
-          title: value.title,
-          visibility: value.private ? 'private' : 'public',
-        },
-    
-      );
+      const client = await getClient();
+      const {data} = await client.post('/playlist/create', {
+        resId: selectedAudio?.id,
+        title: value.title,
+        visibility: value.private ? 'private' : 'public',
+      });
       console.log(data);
     } catch (error) {
       const errorMessage = catchAsyncError(error);
@@ -81,29 +74,48 @@ const Home: FC<Props> = props => {
 
   const updatePlaylist = async (item: Playlist) => {
     try {
-      const client = await getClient()
-      const {data} = await client.patch(
-        '/playlist',
-        {
-          id: item.id,
-          item: selectedAudio?.id,
-          title: item.title,
-          visibility: item.visibility,
-        },
+      const client = await getClient();
+      const {data} = await client.patch('/playlist', {
+        id: item.id,
+        item: selectedAudio?.id,
+        title: item.title,
+        visibility: item.visibility,
+      });
+      setSelectedAudio(undefined);
+      setShowPlaylistModal(false);
+      dispatch(
+        updateNotification({message: 'New audio added.', type: 'success'}),
       );
-        setSelectedAudio(undefined)
-        setShowPlaylistModal(false)
-        dispatch(updateNotification({message: "New audio added.", type: 'success'}))
     } catch (error) {
       const errorMessage = catchAsyncError(error);
       console.log(errorMessage);
     }
   };
+
+  useEffect(() => {
+    const setupPlayer = async () => {
+      await TrackPlayer.setupPlayer();
+    };
+
+    setupPlayer();
+  }, []);
   return (
     <View style={styles.container}>
       <LatestUploads
-        onAudioPress={item => {
-          console.log(item);
+        onAudioPress={async (item, data) => {
+          const lists: Track[] = data.map(item => {
+            return {
+              id: item.id,
+              title: item.title,
+              url: item.file,
+              artwork: item.poster || require('../assets/music.png'),
+              artist: item.owner.name,
+              gender: item.category,
+              isLiveStream: true
+            }
+          });
+          await TrackPlayer.add([...lists]);
+          await TrackPlayer.play()
         }}
         onAudioLongPress={handleOnLongPress}
       />
