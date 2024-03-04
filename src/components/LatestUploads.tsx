@@ -4,8 +4,10 @@ import colors from '@utils/colors';
 import {FC} from 'react';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {onlineManager} from 'react-query';
+import {useSelector} from 'react-redux';
 import {AudioData} from 'src/@types/audio';
 import {useFetchLatestAudios} from 'src/hooks/query';
+import { getPlayerState } from 'src/store/player';
 
 interface Props {
   onAudioPress(item: AudioData, data: AudioData[]): void;
@@ -16,7 +18,7 @@ const dummyData = new Array(4).fill('');
 
 const LatestUploads: FC<Props> = ({onAudioPress, onAudioLongPress}) => {
   const {data, isLoading} = useFetchLatestAudios();
-
+  const {onGoingAudio} = useSelector(getPlayerState);
   if (isLoading)
     return (
       <PulseAnimationContainer>
@@ -41,7 +43,9 @@ const LatestUploads: FC<Props> = ({onAudioPress, onAudioLongPress}) => {
               key={item.id}
               title={item.title}
               poster={item.poster}
-              onPress={() => onAudioPress(item, data)} onLongPress={() => onAudioLongPress(item, data)}
+              onPress={() => onAudioPress(item, data)}
+              onLongPress={() => onAudioLongPress(item, data)}
+              playing={item.id === onGoingAudio?.id}
             />
           );
         })}
