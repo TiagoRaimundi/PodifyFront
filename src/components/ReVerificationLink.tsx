@@ -1,5 +1,5 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import AppLink from '@ui/AppLink';
+import AppLink from '@ui/AppLink'
 import colors from '@utils/colors';
 import {FC, useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
