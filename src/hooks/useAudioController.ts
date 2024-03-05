@@ -34,6 +34,8 @@ const useAudioController = () => {
 
   const isPlayerReady = playbackState !== State.None;
 
+  const isPlaying = playbackState === State.Playing
+
   const onAudioPress = async (item: AudioData, data: AudioData[]) => {
     if (!isPlayerReady) {
       //Playing audio for the first time.
@@ -68,14 +70,14 @@ const useAudioController = () => {
         await updateQueue(data);
         dispatch(updateOnGoingList(data));
       }
-      
+
       await TrackPlayer.skip(index);
       await TrackPlayer.play();
       dispatch(updateOnGoingAudio(item))
     }
   };
 
-  return {onAudioPress};
+  return {onAudioPress, isPlayerReady, isPlaying};
 };
 
 export default useAudioController;
