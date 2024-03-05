@@ -58,12 +58,20 @@ const useAudioController = () => {
     if (onGoingAudio?.id !== item.id) {
       //playing new audio from same list
       const fromSameList = deepEqual(onGoingList, data);
-      if(fromSameList){
-        //playing new audio from different list
 
-      }else{
+      await TrackPlayer.pause();
+      const index = data.findIndex(audio => audio.id === item.id);
+
+      if (!fromSameList) {
         //playing new audio from different list
+        await TrackPlayer.reset();
+        await updateQueue(data);
+        dispatch(updateOnGoingList(data));
       }
+      
+      await TrackPlayer.skip(index);
+      await TrackPlayer.play();
+      dispatch(updateOnGoingAudio(item))
     }
   };
 
