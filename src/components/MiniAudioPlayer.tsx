@@ -14,7 +14,7 @@ export const MiniPlayerHeight = 60;
 
 const MiniAudioPlayer: FC<Props> = props => {
   const {onGoingAudio} = useSelector(getPlayerState);
-  const {isPlaying} = useAudioController()
+  const {isPlaying, togglePlayPause} = useAudioController()
 
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
@@ -31,7 +31,7 @@ const MiniAudioPlayer: FC<Props> = props => {
         <AntDesign name="hearto" size={24} color={colors.CONTRAST} />
       </Pressable>
 
-      <PlayPauseBtn playing={isPlaying}/>
+      <PlayPauseBtn playing={isPlaying} onPress={togglePlayPause}/>
     </View>
   );
 };
