@@ -1,12 +1,12 @@
+import AppView from '@components/AppView';
 import LatestUploads from '@components/LatestUploads';
 import OptionsModal from '@components/OptionsModal';
 import PlaylistForm, {PlaylistInfo} from '@components/PlaylistForm';
 import PlaylistModal from '@components/PlaylistModal';
 import RecommendedAudios from '@components/RecommendedAudios';
-import {getFromAsyncStorage, Keys} from '@utils/asyncStorage';
 import colors from '@utils/colors';
 import {FC, useEffect, useState} from 'react';
-import {View, StyleSheet, Pressable, Text} from 'react-native';
+import {StyleSheet, Pressable, Text, ScrollView} from 'react-native';
 import TrackPlayer, {Track} from 'react-native-track-player';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
@@ -101,7 +101,8 @@ const Home: FC<Props> = props => {
 
   
   return (
-    <View style={styles.container}>
+    <AppView>
+      <ScrollView contentContainerStyle={styles.container}>
       <LatestUploads onAudioPress={onAudioPress} onAudioLongPress={handleOnLongPress} />
       <RecommendedAudios
         onAudioPress={onAudioPress}
@@ -126,6 +127,7 @@ const Home: FC<Props> = props => {
         ]}
         renderItem={item => {
           return (
+
             <Pressable onPress={item.onPress} style={styles.optionContainer}>
               <MaterialComIcon
                 size={24}
@@ -156,7 +158,8 @@ const Home: FC<Props> = props => {
         }}
         onSubmit={handlePlaylistSubmit}
       />
-    </View>
+      </ScrollView>
+    </AppView>
   );
 };
 
