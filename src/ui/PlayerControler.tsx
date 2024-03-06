@@ -6,11 +6,13 @@ interface Props {
   size?: number;
   children: ReactNode;
   ignoreContainer?: boolean;
+  onPress?(): void;
 }
 
-const PlayerControler: FC<Props> = ({size = 45, ignoreContainer, children}) => {
+const PlayerControler: FC<Props> = ({size = 45, ignoreContainer, children, onPress}) => {
   return (
     <Pressable
+    onPress={onPress}
       style={{
         width: size,
         height: size,
