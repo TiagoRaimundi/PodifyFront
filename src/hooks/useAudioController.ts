@@ -31,12 +31,12 @@ const useAudioController = () => {
   const {state: playbackState} = usePlaybackState() as {state?: State};
   const {onGoingAudio, onGoingList} = useSelector(getPlayerState);
   const dispatch = useDispatch();
-  
 
   const isPlayerReady = playbackState !== State.None;
   const isPlaying = playbackState === State.Playing;
   const isPaused = playbackState === State.Paused;
-  const isBusy = playbackState === State.Buffering || playbackState === State.Connecting 
+  const isBusy =
+    playbackState === State.Buffering || playbackState === State.Connecting;
 
   const onAudioPress = async (item: AudioData, data: AudioData[]) => {
     if (!isPlayerReady) {
@@ -80,11 +80,15 @@ const useAudioController = () => {
   };
 
   const togglePlayPause = async () => {
-    if(isPlaying) await TrackPlayer.pause()
-    if(isPaused) await TrackPlayer.play()
-  }
+    if (isPlaying) await TrackPlayer.pause();
+    if (isPaused) await TrackPlayer.play();
+  };
 
-  return {onAudioPress, togglePlayPause, isPlayerReady, isPlaying, isBusy};
+  const seekTo = async (position: number) => {
+    await TrackPlayer.seekTo(position);
+  };
+
+  return {onAudioPress, seekTo, togglePlayPause, isPlayerReady, isPlaying, isBusy};
 };
 
 export default useAudioController;

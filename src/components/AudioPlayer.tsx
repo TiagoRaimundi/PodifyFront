@@ -5,8 +5,10 @@ import {FC} from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 import {useProgress} from 'react-native-track-player';
 import {useSelector} from 'react-redux';
-import { getPlayerState } from 'src/store/player';
+import {getPlayerState} from 'src/store/player';
 import formatDuration from 'format-duration';
+import Slider from '@react-native-community/slider';
+import useAudioController from 'src/hooks/useAudioController';
 
 interface Props {
   visible: boolean;
@@ -21,10 +23,15 @@ const fromattedDuration = (duration = 0) => {
 
 const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
   const {onGoingAudio} = useSelector(getPlayerState);
+  const {seekTo} = useAudioController()
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
 
   const {duration, position} = useProgress();
+
+  const updateSeek = async (value: number) => {
+    await seekTo(value);
+  }
 
   return (
     <AppModal animation visible={visible} onRequestClose={onRequestClose}>
@@ -43,6 +50,14 @@ const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
               {fromattedDuration(duration * 1000)}
             </Text>
           </View>
+          <Slider
+            minimumValue={0}
+            maximumValue={duration}
+            minimumTrackTintColor={colors.CONTRAST}
+            maximumTrackTintColor={colors.INACTIVE_CONTRAST}
+            value={position}
+            onSlidingComplete={updateSeek}
+          />
         </View>
       </View>
     </AppModal>
