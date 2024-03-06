@@ -8,12 +8,12 @@ import {
   updateBusyState,
   updateLoggedInState,
   updateProfile,
-  loginSuccess
+  loginSuccess,
 } from 'src/store/auth';
 import AuthNavigator from './AuthNavigation';
 import TabNavigator from './TabNavigator';
 import {View, StyleSheet} from 'react-native';
-import Loader from '@ui/loader';
+import Loader from '@ui/Loader';
 import colors from '@utils/colors';
 
 interface Props {}
@@ -45,13 +45,11 @@ const AppNavigator: FC<Props> = props => {
             Authorization: 'Bearer ' + token,
           },
         });
-    
-        dispatch(loginSuccess({profile: data.profile }));
+
+        dispatch(loginSuccess({profile: data.profile}));
         dispatch(updateLoggedInState(true));
-     
-        dispatch(updateProfile(data.profile))
-     
-    
+
+        dispatch(updateProfile(data.profile));
       } catch (error) {
         console.log('Auth error: ', error);
       }

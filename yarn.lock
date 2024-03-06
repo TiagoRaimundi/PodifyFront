@@ -1166,6 +1166,13 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@egjs/hammerjs@^2.0.17":
+  version "2.0.17"
+  resolved "https://registry.npmjs.org/@egjs/hammerjs/-/hammerjs-2.0.17.tgz"
+  integrity sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==
+  dependencies:
+    "@types/hammerjs" "^2.0.36"
+
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
   resolved "https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz"
@@ -1939,6 +1946,11 @@
   integrity sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==
   dependencies:
     "@types/node" "*"
+
+"@types/hammerjs@^2.0.36":
+  version "2.0.45"
+  resolved "https://registry.npmjs.org/@types/hammerjs/-/hammerjs-2.0.45.tgz"
+  integrity sha512-qkcUlZmX6c4J8q45taBKTL3p+LbITgyx7qhlPYOdOHZB7B31K0mXbP5YA7i7SgDeEGuI9MnumiKPEMrxg8j3KQ==
 
 "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.5"
@@ -3713,6 +3725,11 @@ form-data@^4.0.0:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
+
+format-duration@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.npmjs.org/format-duration/-/format-duration-3.0.2.tgz"
+  integrity sha512-pKzJDSRgK2lqAiPW3uizDaIJaJnataZclsahz25UMwfdryBGDa+1HlbXGjzpMvX/2kMh4O0sNevFXKaEfCjHsA==
 
 formik@^2.4.5:
   version "2.4.5"
@@ -6248,6 +6265,17 @@ react-native-document-picker@^9.1.1:
   integrity sha512-BW+7DbsILuFThlBm7NUFVUmKKf6Awkcf9R0q8wiCU2DlGGtAKQTt2iHpO5+Dn/7WMPB+rqNv3X1HsmJQ0t5R3g==
   dependencies:
     invariant "^2.2.4"
+
+react-native-gesture-handler@^2.15.0:
+  version "2.15.0"
+  resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.15.0.tgz"
+  integrity sha512-cmMGW8k86o/xgVTBZZOPohvR5re4Vh65PUxH4HbBBJAYTog4aN4wTVTUlnoky01HuSN8/X4h3tI/K3XLPoDnsg==
+  dependencies:
+    "@egjs/hammerjs" "^2.0.17"
+    hoist-non-react-statics "^3.3.0"
+    invariant "^2.2.4"
+    lodash "^4.17.21"
+    prop-types "^15.7.2"
 
 react-native-image-crop-picker@^0.40.3:
   version "0.40.3"

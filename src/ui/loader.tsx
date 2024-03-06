@@ -1,29 +1,35 @@
 import colors from '@utils/colors';
 import {FC, useEffect} from 'react';
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 interface Props {
-    color?: string
+  color?: string;
 }
 
-const Loader: FC<Props> = ({color=colors.CONTRAST}) => {
-   const initialRotation = useSharedValue(0)
+const Loader: FC<Props> = ({color = colors.CONTRAST}) => {
+  const initialRotation = useSharedValue(0);
 
-   const transform = useAnimatedStyle(() => {
+  const transform = useAnimatedStyle(() => {
     return {
-        transform: [{rotate: `${initialRotation.value}deg`}]
-    }
-   });
+      transform: [{rotate: `${initialRotation.value}deg`}],
+    };
+  });
 
-   useEffect (() => {
-    initialRotation.value = withRepeat(withTiming(360), -1)
-   })
-  return <Animated.View style={transform}>
+  useEffect(() => {
+    initialRotation.value = withRepeat(withTiming(360), -1);
+  });
 
-    <AntDesign name='loading1' size={24} color={color}/>
+  return (
+    <Animated.View style={transform}>
+      <AntDesign name="loading1" size={24} color={color} />
+    </Animated.View>
+  );
+};
 
-  </Animated.View>;
- }
-
-  
-export default Loader; 
+export default Loader;

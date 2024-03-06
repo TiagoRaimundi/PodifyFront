@@ -1,22 +1,26 @@
 import colors from '@utils/colors';
 import {FC} from 'react';
 import {StyleSheet, Pressable, Text} from 'react-native';
-import Loader from './loader';
+import Loader from './Loader';
 
 interface Props {
   title: string;
   onPress?(): void;
   busy?: boolean;
-  borderRadius?: number 
+  borderRadius?: number;
 }
 
 const AppButton: FC<Props> = ({title, onPress, busy, borderRadius}) => {
   return (
-    <Pressable onPress={onPress} style={[styles.container, {
-      borderRadius: borderRadius || 25
-    }]}>
-      {!busy ? <Text style={styles.title}>{title}</Text> :
-      <Loader/>}
+    <Pressable
+      onPress={onPress}
+      style={[
+        styles.container,
+        {
+          borderRadius: borderRadius || 25,
+        },
+      ]}>
+      {!busy ? <Text style={styles.title}>{title}</Text> : <Loader />}
     </Pressable>
   );
 };
