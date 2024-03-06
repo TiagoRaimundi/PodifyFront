@@ -13,9 +13,9 @@ const PlayPauseBtn: FC<Props> = ({color = colors.CONTRAST, playing, onPress}) =>
   return (
     <Pressable onPress={onPress} style={styles.button}>
       {playing ? (
-        <AntDesign name="pause" size={24} color={colors.CONTRAST} />
+        <AntDesign name="pause" size={24} color={colors.PRIMARY} />
       ) : (
-        <AntDesign name="caretright" size={24} color={colors.CONTRAST} />
+        <AntDesign name="caretright" size={24} color={colors.PRIMARY} />
       )}
     </Pressable>
   );

@@ -20,6 +20,7 @@ interface Props<T> {
   onRequestClose?(): void;
 }
 
+
 const CategorySelector = <T extends any>({
   data,
   title,
