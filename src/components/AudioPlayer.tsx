@@ -4,8 +4,8 @@ import colors from '@utils/colors';
 import {FC} from 'react';
 import {View, StyleSheet, Image, Text, Pressable} from 'react-native';
 import {useProgress} from 'react-native-track-player';
-import {useSelector} from 'react-redux';
-import {getPlayerState} from 'src/store/player';
+import {useDispatch, useSelector} from 'react-redux';
+import {getPlayerState, updatePlaybackRate} from 'src/store/player';
 import formatDuration from 'format-duration';
 import Slider from '@react-native-community/slider';
 import useAudioController from 'src/hooks/useAudioController';
@@ -28,13 +28,22 @@ const fromattedDuration = (duration = 0) => {
 };
 
 const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
-  const {onGoingAudio} = useSelector(getPlayerState);
-  const {isPlaying, isBusy, onNextPress, seekTo, skipTo, onPreviousPress, togglePlayPause} =
-    useAudioController();
+  const {onGoingAudio, playbackRate} = useSelector(getPlayerState);
+  const {
+    isPlaying,
+    isBusy,
+    onNextPress,
+    seekTo,
+    skipTo,
+    setPlaybackRate,
+    onPreviousPress,
+    togglePlayPause,
+  } = useAudioController();
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
 
   const {duration, position} = useProgress();
+  const dispatch = useDispatch()
 
   const handleOnNextPress = async () => {
     await onNextPress();
@@ -51,6 +60,11 @@ const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
   const handleSkipTo = async (skipType: 'forward' | 'reverse') => {
     if (skipType === 'forward') await skipTo(10);
     if (skipType === 'reverse') await skipTo(-10);
+  };
+
+  const onPlaybackRatekPress = async (rate: number) => {
+    await setPlaybackRate(rate);
+    dispatch(updatePlaybackRate(rate))
   };
 
   return (
@@ -129,9 +143,11 @@ const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
               <AntDesign name="stepforward" size={24} color={colors.CONTRAST} />
             </PlayerControler>
           </View>
-          <PlaybackRateSelector onPress={(rate) => console.log(rate)}
-          activeRate='0.25'
-          containerStyle={{marginTop: 20}}/>
+          <PlaybackRateSelector
+            onPress={onPlaybackRatekPress}
+            activeRate={playbackRate.toString()}
+            containerStyle={{marginTop: 20}}
+          />
         </View>
       </View>
     </AppModal>
