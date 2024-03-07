@@ -129,7 +129,9 @@ const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
               <AntDesign name="stepforward" size={24} color={colors.CONTRAST} />
             </PlayerControler>
           </View>
-          <PlaybackRateSelector containerStyle={{marginTop: 20}}/>
+          <PlaybackRateSelector onPress={(rate) => console.log(rate)}
+          activeRate='0.25'
+          containerStyle={{marginTop: 20}}/>
         </View>
       </View>
     </AppModal>
