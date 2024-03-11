@@ -12,6 +12,7 @@ import useAudioController from 'src/hooks/useAudioController';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import PlayPauseBtn from '@ui/PlayPauseBtn';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayerControler from '@ui/PlayerControler';
 import Loader from '@ui/Loader';
 import PlaybackRateSelector from '@ui/PlaybackRateSelector';
@@ -20,6 +21,7 @@ import AudioInfoContainer from './AudioInfoContainer';
 interface Props {
   visible: boolean;
   onRequestClose(): void;
+  onListOptionPress?(): void;
 }
 
 const fromattedDuration = (duration = 0) => {
@@ -28,7 +30,11 @@ const fromattedDuration = (duration = 0) => {
   });
 };
 
-const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
+const AudioPlayer: FC<Props> = ({
+  visible,
+  onRequestClose,
+  onListOptionPress,
+}) => {
   const [showAudioInfo, setShowAudioInfo] = useState(false);
   const {onGoingAudio, playbackRate} = useSelector(getPlayerState);
   const {
@@ -77,8 +83,10 @@ const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
           style={styles.infoBtn}>
           <AntDesign name="infocirlceo" color={colors.CONTRAST} size={24} />
         </Pressable>
-        <AudioInfoContainer visible={showAudioInfo}
-        closeHandler={setShowAudioInfo}/>
+        <AudioInfoContainer
+          visible={showAudioInfo}
+          closeHandler={setShowAudioInfo}
+        />
         <Image source={source} style={styles.poster} />
         <View style={styles.contentContainer}>
           <Text style={styles.title}>{onGoingAudio?.title}</Text>
@@ -157,6 +165,15 @@ const AudioPlayer: FC<Props> = ({visible, onRequestClose}) => {
             activeRate={playbackRate.toString()}
             containerStyle={{marginTop: 20}}
           />
+          <View style={styles.listOptionBtnContainer}>
+            <PlayerControler onPress={onListOptionPress} ignoreContainer>
+              <MaterialComIcon
+                name="playlist-music"
+                size={24}
+                color={colors.CONTRAST}
+              />
+            </PlayerControler>
+          </View>
         </View>
       </View>
     </AppModal>
@@ -211,6 +228,10 @@ const styles = StyleSheet.create({
     right: 10,
     top: 10,
   },
+  listOptionBtnContainer: {
+    alignItems: 'flex-end',
+    
+  }
 });
 
 export default AudioPlayer;
