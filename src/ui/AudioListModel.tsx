@@ -5,26 +5,47 @@ import AppModal from './AppModal';
 import {AudioData} from 'src/@types/audio';
 import {FlatList} from 'react-native-gesture-handler';
 import AudioListItem from './AudioListItem';
+import AudioListLoadingUI from './AudioListLoadingUI';
 
 interface Props {
   data: AudioData[];
   header?: string;
   visible: boolean;
   onRequestClose(): void;
+  onItemPress(item: AudioData, data: AudioData[]): void;
+  loading?: boolean;
 }
 
-const AudioListModel: FC<Props> = ({header, visible, data, onRequestClose}) => {
+const AudioListModel: FC<Props> = ({
+  header,
+  visible,
+  loading,
+  data,
+  onItemPress,
+  onRequestClose,
+}) => {
   return (
     <AppModal visible={visible} onRequestClose={onRequestClose}>
       <View style={styles.container}>
-        <Text style={styles.header}>{header}</Text>
-        <FlatList
-          data={data}
-          keyExtractor={item => item.id}
-          renderItem={({item}) => {
-            return <AudioListItem audio={item} />;
-          }}
-        />
+        {loading ? (
+          <AudioListLoadingUI />
+        ) : (
+          <>
+            <Text style={styles.header}>{header}</Text>
+            <FlatList
+              data={data}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => {
+                return (
+                  <AudioListItem
+                    onPress={() => onItemPress(item, data)}
+                    audio={item}
+                  />
+                );
+              }}
+            />
+          </>
+        )}
       </View>
     </AppModal>
   );
