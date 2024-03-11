@@ -6,6 +6,8 @@ import {AudioData} from 'src/@types/audio';
 import {FlatList} from 'react-native-gesture-handler';
 import AudioListItem from './AudioListItem';
 import AudioListLoadingUI from './AudioListLoadingUI';
+import {useSelector} from 'react-redux';
+import {getPlayerState} from 'src/store/player';
 
 interface Props {
   data: AudioData[];
@@ -24,6 +26,8 @@ const AudioListModel: FC<Props> = ({
   onItemPress,
   onRequestClose,
 }) => {
+  const {onGoingAudio} = useSelector(getPlayerState);
+
   return (
     <AppModal visible={visible} onRequestClose={onRequestClose}>
       <View style={styles.container}>
@@ -40,6 +44,7 @@ const AudioListModel: FC<Props> = ({
                   <AudioListItem
                     onPress={() => onItemPress(item, data)}
                     audio={item}
+                    isPlaying={onGoingAudio?.id === item.id}
                   />
                 );
               }}
