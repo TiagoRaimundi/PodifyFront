@@ -2,18 +2,29 @@ import colors from '@utils/colors';
 import {FC} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import AppModal from './AppModal';
+import {AudioData} from 'src/@types/audio';
+import {FlatList} from 'react-native-gesture-handler';
+import AudioListItem from './AudioListItem';
 
 interface Props {
+  data: AudioData[];
   header?: string;
   visible: boolean;
   onRequestClose(): void;
 }
 
-const AudioListModel: FC<Props> = ({header, visible, onRequestClose}) => {
+const AudioListModel: FC<Props> = ({header, visible, data, onRequestClose}) => {
   return (
     <AppModal visible={visible} onRequestClose={onRequestClose}>
       <View style={styles.container}>
         <Text style={styles.header}>{header}</Text>
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            return <AudioListItem audio={item} />;
+          }}
+        />
       </View>
     </AppModal>
   );
@@ -27,6 +38,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: colors.CONTRAST,
+    paddingVertical: 10,
   },
 });
 
