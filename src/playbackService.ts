@@ -17,6 +17,13 @@ const playbackService = async () => {
     TrackPlayer.skipToPrevious()
     
   });
+  TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, e  => {
+   console.log(e);
+  });
+  
+
+
+
 };
 
 
