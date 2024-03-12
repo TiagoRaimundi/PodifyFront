@@ -1,6 +1,7 @@
 import {categoriesTypes} from '@utils/categories';
 
 export interface AudioData {
+
   id: string;
   title: string;
   about: string;
@@ -14,8 +15,18 @@ export interface AudioData {
 }
 
 export interface Playlist {
-  id: string
+  id: string;
   title: string;
   itemsCount: number;
-  visibility: "public" | "private";
+  visibility: 'public' | 'private';
+}
+
+export interface History {
+  date: string;
+  audios: {
+    audioId: string;
+    date: string;
+    id: string;
+    title: string;
+  }[];
 }
