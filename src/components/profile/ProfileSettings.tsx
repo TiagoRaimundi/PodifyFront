@@ -30,6 +30,7 @@ import deepEqual from 'deep-equal';
 import ImagePicker from 'react-native-image-crop-picker';
 import {getPermissionToReadImages} from '@utils/helper';
 import ReVerificationLink from '@components/ReVerificationLink';
+import {useQueries, useQueryClient} from 'react-query';
 
 interface Props {}
 interface ProfileInfo {
@@ -42,6 +43,7 @@ const ProfileSettings: FC<Props> = props => {
   const [busy, setBusy] = useState(false);
   const dispatch = useDispatch();
   const {profile} = useSelector(getAuthState);
+  const queryClient = useQueryClient();
 
   const isSame = deepEqual(userInfo, {
     name: profile?.name,
@@ -116,9 +118,17 @@ const ProfileSettings: FC<Props> = props => {
     }
   };
 
-  const clearHistory = () => {
-    console.log('clearing out history')
-  }
+  const clearHistory = async () => {
+    try {
+      const client = await getClient();
+      dispatch(updateNotification({message: 'Your histories will be removed!', type: 'success'}));
+      await client.delete('/history?all=yes');
+      queryClient.invalidateQueries({queryKey: ['histories']});
+    } catch (error) {
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+    }
+  };
 
   const handleOnHistoryClear = () => {
     Alert.alert(
