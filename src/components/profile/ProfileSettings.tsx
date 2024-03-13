@@ -9,6 +9,7 @@ import {
   Pressable,
   TextInput,
   PermissionsAndroid,
+  Alert,
 } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -115,6 +116,33 @@ const ProfileSettings: FC<Props> = props => {
     }
   };
 
+  const clearHistory = () => {
+    console.log('clearing out history')
+  }
+
+  const handleOnHistoryClear = () => {
+    Alert.alert(
+      'Are you sure?',
+      'This action will clear out all the history!',
+      [
+        {
+          text: 'Clear',
+          style: 'destructive',
+          onPress() {
+            clearHistory();
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+  };
+
   useEffect(() => {
     if (profile) setUserInfo({name: profile.name, avatar: profile.avatar});
   }, [profile]);
@@ -154,7 +182,9 @@ const ProfileSettings: FC<Props> = props => {
       </View>
 
       <View style={styles.settingOptionsContainer}>
-        <Pressable style={styles.ButtonContainer}>
+        <Pressable
+          onPress={handleOnHistoryClear}
+          style={styles.ButtonContainer}>
           <MaterialComIcon name="broom" size={20} color={colors.CONTRAST} />
           <Text style={styles.buttonTitle}>Clear All</Text>
         </Pressable>
