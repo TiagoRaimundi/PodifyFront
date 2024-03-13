@@ -15,15 +15,15 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import AppButton from '@ui/AppButton';
 import {getClient} from 'src/api/client';
 import catchAsyncError from 'src/api/catchError';
-import {useDispatch, useSelector} from 'react-redux';
 import {updateNotification} from 'src/store/notification';
-import {Keys, removeFromAsyncStorage} from '@utils/asyncStorage';
 import {
-  getAuthState,
-  updateBusyState,
-  updateLoggedInState,
   updateProfile,
+  updateLoggedInState,
+  updateBusyState,
+  getAuthState,
 } from 'src/store/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import {Keys, removeFromAsyncStorage} from '@utils/asyncStorage';
 import deepEqual from 'deep-equal';
 import ImagePicker from 'react-native-image-crop-picker';
 import {getPermissionToReadImages} from '@utils/helper';
@@ -33,7 +33,6 @@ interface Props {}
 interface ProfileInfo {
   name: string;
   avatar?: string;
-  
 }
 
 const ProfileSettings: FC<Props> = props => {
@@ -84,16 +83,15 @@ const ProfileSettings: FC<Props> = props => {
         });
       }
 
-      const client = await getClient({'Content-Type': 'multipart/form-data'});
+      const client = await getClient({'Content-Type': 'multipart/form-data;'});
       const {data} = await client.post('/auth/update-profile', formData);
       dispatch(updateProfile(data.profile));
       dispatch(
         updateNotification({
-          message: 'Your profile is updated',
+          message: 'Your profile is updated.',
           type: 'success',
         }),
       );
-      dispatch;
     } catch (error) {
       const errorMessage = catchAsyncError(error);
       dispatch(updateNotification({message: errorMessage, type: 'error'}));
@@ -101,7 +99,7 @@ const ProfileSettings: FC<Props> = props => {
     setBusy(false);
   };
 
-  const handeImageSelecte = async () => {
+  const handleImageSelect = async () => {
     try {
       await getPermissionToReadImages();
       const {path} = await ImagePicker.openPicker({
@@ -123,7 +121,7 @@ const ProfileSettings: FC<Props> = props => {
   return (
     <View style={styles.container}>
       <AppHeader title="Settings" />
-      <Text style={{color: 'white', fontSize: 25}}>ProfileSettings</Text>
+
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Profile Settings</Text>
       </View>
@@ -131,7 +129,7 @@ const ProfileSettings: FC<Props> = props => {
       <View style={styles.settingOptionsContainer}>
         <View style={styles.avatarContainer}>
           <AvatarField source={userInfo.avatar} />
-          <Pressable onPress={handeImageSelecte} style={styles.paddingLeft}>
+          <Pressable onPress={handleImageSelect} style={styles.paddingLeft}>
             <Text style={styles.linkText}>Update Profile Image</Text>
           </Pressable>
         </View>
@@ -140,10 +138,10 @@ const ProfileSettings: FC<Props> = props => {
           style={styles.nameInput}
           value={userInfo.name}
         />
-        <View style={styles.emailContainer}>
+        <View style={styles.emailConainer}>
           <Text style={styles.email}>{profile?.email}</Text>
           {profile?.verified ? (
-            <MaterialIcon name="verified" size={15} color={colors.CONTRAST} />
+            <MaterialIcon name="verified" size={15} color={colors.SECONDARY} />
           ) : (
             <ReVerificationLink linkTitle="verify" activeAtFirst />
           )}
@@ -151,7 +149,7 @@ const ProfileSettings: FC<Props> = props => {
       </View>
 
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>logout</Text>
+        <Text style={styles.title}>Logout</Text>
       </View>
 
       <View style={styles.settingOptionsContainer}>
@@ -164,11 +162,12 @@ const ProfileSettings: FC<Props> = props => {
           <Text style={styles.logoutBtnTitle}>Logout</Text>
         </Pressable>
       </View>
+
       {!isSame ? (
         <View style={styles.marginTop}>
           <AppButton
             onPress={handleSubmit}
-            title="update"
+            title="Update"
             borderRadius={7}
             busy={busy}
           />
@@ -185,8 +184,8 @@ const styles = StyleSheet.create({
   titleContainer: {
     borderBottomWidth: 0.5,
     borderBottomColor: colors.SECONDARY,
+    paddingBottom: 5,
     marginTop: 15,
-    paddingTop: 15,
   },
   title: {
     fontWeight: 'bold',
@@ -218,14 +217,14 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     marginTop: 15,
   },
-  emailContainer: {
+  emailConainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 15,
   },
   email: {
     color: colors.CONTRAST,
-    marginLeft: 10,
+    marginRight: 10,
   },
   logoutBtn: {
     flexDirection: 'row',

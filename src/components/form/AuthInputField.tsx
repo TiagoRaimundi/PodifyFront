@@ -11,7 +11,6 @@ import {
   ViewStyle,
   Pressable,
 } from 'react-native';
-
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -23,8 +22,6 @@ import Animated, {
 interface Props {
   name: string;
   label?: string;
-  value?: string;
-  errorMsg?: string;
   placeholder?: string;
   keyboardType?: TextInputProps['keyboardType'];
   autoCapitalize?: TextInputProps['autoCapitalize'];
@@ -37,15 +34,15 @@ interface Props {
 const AuthInputField: FC<Props> = props => {
   const inputTransformValue = useSharedValue(0);
 
-  const {handleChange, values, errors, touched, handleBlur} = useFormikContext<{
+  const {handleChange, values, errors, handleBlur, touched} = useFormikContext<{
     [key: string]: string;
   }>();
 
   const {
     label,
     placeholder,
-    keyboardType,
     autoCapitalize,
+    keyboardType,
     secureTextEntry,
     containerStyle,
     name,
@@ -93,6 +90,7 @@ const AuthInputField: FC<Props> = props => {
           value={values[name]}
           onBlur={handleBlur(name)}
         />
+
         {rightIcon ? (
           <Pressable onPress={onRightIconPress} style={styles.rightIcon}>
             {rightIcon}
@@ -104,24 +102,24 @@ const AuthInputField: FC<Props> = props => {
 };
 
 const styles = StyleSheet.create({
-  label: {
-    color: colors.CONTRAST,
-  },
-  errorMsg: {
-    color: colors.ERROR,
-  },
   labelContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 5,
   },
+  label: {
+    color: colors.CONTRAST,
+  },
+  errorMsg: {
+    color: colors.ERROR,
+  },
   rightIcon: {
     width: 45,
     height: 45,
     position: 'absolute',
-    right: 0,
     top: 0,
+    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
   },

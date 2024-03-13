@@ -1,7 +1,6 @@
 import PlaylistItem from '@ui/PlaylistItem';
 import {FC} from 'react';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
-
 import {useFetchPlaylist} from 'src/hooks/query';
 
 interface Props {}

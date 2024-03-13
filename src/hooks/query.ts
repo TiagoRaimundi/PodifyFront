@@ -75,15 +75,13 @@ export const useFetchUploadsByProfile = () => {
   });
 };
 
-
-
 const fetchFavorites = async (): Promise<AudioData[]> => {
   const client = await getClient();
   const {data} = await client('/favorite');
   return data.audios;
 };
 
-export const useFetchFavorites = () => {
+export const useFetchFavorite = () => {
   const dispatch = useDispatch();
   return useQuery(['favorite'], {
     queryFn: () => fetchFavorites(),
@@ -94,7 +92,6 @@ export const useFetchFavorites = () => {
   });
 };
 
-
 const fetchHistories = async (): Promise<History[]> => {
   const client = await getClient();
   const {data} = await client('/history');
@@ -104,7 +101,7 @@ const fetchHistories = async (): Promise<History[]> => {
 export const useFetchHistories = () => {
   const dispatch = useDispatch();
   return useQuery(['histories'], {
-    queryFn: () => fetchFavorites(),
+    queryFn: () => fetchHistories(),
     onError(err) {
       const errorMessage = catchAsyncError(err);
       dispatch(updateNotification({message: errorMessage, type: 'error'}));

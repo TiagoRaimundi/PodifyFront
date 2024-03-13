@@ -1,7 +1,6 @@
 import {categoriesTypes} from '@utils/categories';
 
 export interface AudioData {
-
   id: string;
   title: string;
   about: string;
@@ -25,7 +24,7 @@ export interface History {
   date: string;
   audios: {
     audioId: string;
-    date: string;
+    data: string;
     id: string;
     title: string;
   }[];

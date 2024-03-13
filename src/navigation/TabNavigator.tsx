@@ -6,11 +6,13 @@ import Upload from '@views/Upload';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfileNavigatior from './ProfileNavigatior';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -59,6 +61,7 @@ const TabNavigator = () => {
         }}
       />
     </Tab.Navigator>
+    </GestureHandlerRootView>
   );
 };
 
