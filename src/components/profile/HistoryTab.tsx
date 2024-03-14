@@ -6,11 +6,26 @@ import {View, StyleSheet, Text, Pressable} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useFetchHistories} from 'src/hooks/query';
 import AntDesing from 'react-native-vector-icons/AntDesign';
+import {getClient} from 'src/api/client';
+import {useQueryClient} from 'react-query';
+import { historyAudio } from 'src/@types/audio';
 
 interface Props {}
 
 const HistoryTab: FC<Props> = props => {
   const {data, isLoading} = useFetchHistories();
+  const queryClient = useQueryClient();
+
+  const removeHistories = async (histories: string[]) => {
+    const client = await getClient();
+    client.delete('/history?histories=' + JSON.stringify(histories));
+    queryClient.invalidateQueries({queryKey: ['histories']});
+  };
+
+  const handleSingleHistoryRemove = async(history: historyAudio) => {
+    await removeHistories([history.id])
+  
+  }
 
   if (isLoading) return <AudioListLoadingUI />;
 
@@ -28,7 +43,7 @@ const HistoryTab: FC<Props> = props => {
                 return (
                   <View key={audio.id + index} style={styles.history}>
                     <Text style={styles.historyTitle}>{audio.title}</Text>
-                    <Pressable>
+                    <Pressable onPress={() => handleSingleHistoryRemove(audio)}>
                       <AntDesing name="close" color={colors.CONTRAST} />
                     </Pressable>
                   </View>
