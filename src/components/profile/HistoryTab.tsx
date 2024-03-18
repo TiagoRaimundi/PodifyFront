@@ -7,9 +7,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useFetchHistories} from 'src/hooks/query';
 import AntDesing from 'react-native-vector-icons/AntDesign';
 import {getClient} from 'src/api/client';
-import {useQueryClient} from 'react-query';
-import {historyAudio} from 'src/@types/audio';
-import { useNavigation } from '@react-navigation/native';
+import {useMutation, useQueryClient} from 'react-query';
+import {History, historyAudio} from 'src/@types/audio';
+import {useNavigation} from '@react-navigation/native';
 
 interface Props {}
 
@@ -17,7 +17,27 @@ const HistoryTab: FC<Props> = props => {
   const {data, isLoading} = useFetchHistories();
   const queryClient = useQueryClient();
   const [selectedHistories, setSelectedHistories] = useState<string[]>([]);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+
+  const removeMutate = useMutation({
+    mutationFn: async histories => removeHistories(histories),
+    onMutate: (histories: string[]) => {
+      queryClient.setQueryData<History[]>(['histories'], oldData => {
+        let newData: History[] = [];
+        if (!oldData) return newData;
+        for (let data of oldData) {
+          const filterData = data.audios.filter(
+            item => !selectedHistories.includes(item.id),
+          );
+          if (filterData.length) {
+            newData.push({date: data.date, audios: filterData});
+          }
+        }
+
+        return newData;
+      });
+    },
+  });
 
   const removeHistories = async (histories: string[]) => {
     const client = await getClient();
@@ -26,12 +46,13 @@ const HistoryTab: FC<Props> = props => {
   };
 
   const handleSingleHistoryRemove = async (history: historyAudio) => {
-    await removeHistories([history.id]);
+    removeMutate.mutate([history.id]);
   };
 
   const handleMultipleHistoryRemove = async () => {
     setSelectedHistories([]);
-    await removeHistories([...selectedHistories]);
+    removeMutate.mutate([...selectedHistories])
+
   };
 
   const handleOnLongPress = (history: historyAudio) => {
@@ -50,14 +71,14 @@ const HistoryTab: FC<Props> = props => {
 
   useEffect(() => {
     const unselectedHistories = () => {
-      setSelectedHistories([])
-    }
-    navigation.addListener('blur', unselectedHistories)
+      setSelectedHistories([]);
+    };
+    navigation.addListener('blur', unselectedHistories);
 
     return () => {
-      navigation.removeListener('blur', unselectedHistories)
-    }
-  }, [])
+      navigation.removeListener('blur', unselectedHistories);
+    };
+  }, []);
 
   if (isLoading) return <AudioListLoadingUI />;
 
