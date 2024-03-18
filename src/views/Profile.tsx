@@ -10,6 +10,7 @@ import {useFetchUploadsByProfile} from 'src/hooks/query';
 import ProfileContainer from '@components/ProfileContainer';
 import { useSelector } from 'react-redux';
 import { getAuthState } from 'src/store/auth';
+import AppView from '@components/AppView';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,7 +22,8 @@ const Profile: FC<Props> = props => {
 
   console.log(data);
   return (
-    <View style={styles.container}>
+    <AppView>
+      <View style={styles.container}>
       <ProfileContainer profile={profile}/>
       <Tab.Navigator
         screenOptions={{
@@ -33,7 +35,8 @@ const Profile: FC<Props> = props => {
         <Tab.Screen name="Favorite" component={FavoriteTab} />
         <Tab.Screen name="History" component={HistoryTab} />
       </Tab.Navigator>
-    </View>
+      </View>
+    </AppView>
   );
 };
 

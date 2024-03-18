@@ -5,6 +5,7 @@ import PlaylistForm, {PlaylistInfo} from '@components/PlaylistForm';
 import PlayListModal from '@components/PlaylistModal';
 import RecentlyPlayed from '@components/RecentlyPlayed';
 import RecommendedAudios from '@components/RecommendedAudios';
+import RecommendedPlaylist from '@components/RecommendedPlaylist';
 import colors from '@utils/colors';
 import {FC, useEffect, useState} from 'react';
 import {StyleSheet, Pressable, Text, ScrollView} from 'react-native';
@@ -108,6 +109,9 @@ const Home: FC<Props> = props => {
           onAudioPress={onAudioPress}
           onAudioLongPress={handleOnLongPress}
         />
+        
+        <RecommendedPlaylist/>
+
         <OptionsModal
           visible={showOptions}
           onRequestClose={() => {
