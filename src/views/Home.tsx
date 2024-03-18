@@ -3,6 +3,7 @@ import LatestUploads from '@components/LatestUploads';
 import OptionsModal from '@components/OptionsModal';
 import PlaylistForm, {PlaylistInfo} from '@components/PlaylistForm';
 import PlayListModal from '@components/PlaylistModal';
+import RecentlyPlayed from '@components/RecentlyPlayed';
 import RecommendedAudios from '@components/RecommendedAudios';
 import colors from '@utils/colors';
 import {FC, useEffect, useState} from 'react';
@@ -98,6 +99,7 @@ const Home: FC<Props> = props => {
   return (
     <AppView>
       <ScrollView contentContainerStyle={styles.container}>
+        <RecentlyPlayed/>
         <LatestUploads
           onAudioPress={onAudioPress}
           onAudioLongPress={handleOnLongPress}
