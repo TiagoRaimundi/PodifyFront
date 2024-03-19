@@ -132,10 +132,10 @@ const fetchRecommendedPlaylist = async (): Promise<Playlist[]> => {
   return data.playlist;
 };
 
-export const usefetchRecommendedPlaylist = () => {
+export const useFetchRecommendedPlaylist = () => {
   const dispatch = useDispatch();
   return useQuery(['recently-played'], {
-    queryFn: () => fetchRecentlyPlayed(),
+    queryFn: () => fetchRecommendedPlaylist(),
     onError(err) {
       const errorMessage = catchAsyncError(err);
       dispatch(updateNotification({message: errorMessage, type: 'error'}));
