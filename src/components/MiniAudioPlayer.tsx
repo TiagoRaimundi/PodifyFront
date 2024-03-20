@@ -14,6 +14,12 @@ import CurrentAudioList from './CurrentAudioList';
 import {useFetchIsFavorite} from 'src/hooks/query';
 import {useMutation, useQueryClient} from 'react-query';
 import {getClient} from 'src/api/client';
+import {
+  NavigationContainerProps,
+  NavigationProp,
+  useNavigation,
+} from '@react-navigation/native';
+import {HomeNavigatorStackParamList} from 'src/@types/navigation';
 
 interface Props {}
 
@@ -25,6 +31,8 @@ const MiniAudioPlayer: FC<Props> = props => {
   const progress = useProgress();
   const [playerVisibility, setPlayerVisibility] = useState(false);
   const [showCurrentList, setShowCurrentList] = useState(false);
+  const {navigate} =
+    useNavigation<NavigationProp<HomeNavigatorStackParamList>>();
 
   const {data: isFav} = useFetchIsFavorite(onGoingAudio?.id || '');
 
@@ -34,9 +42,9 @@ const MiniAudioPlayer: FC<Props> = props => {
   const queryClient = useQueryClient();
 
   const toggleIsFav = async (id: string) => {
-    if(!id) return;
+    if (!id) return;
     const client = await getClient();
-    await client.post('/favorite?audioId='+ id)
+    await client.post('/favorite?audioId=' + id);
   };
 
   const favoriteMutate = useMutation({
@@ -66,6 +74,13 @@ const MiniAudioPlayer: FC<Props> = props => {
     setShowCurrentList(true);
   };
 
+  const handleOnProfileLinkPress = () => {
+    closePlayerModal();
+    navigate('PublicProfile', {
+      profileId: onGoingAudio?.id || '',
+    });
+  };
+
   return (
     <>
       <View
@@ -89,7 +104,9 @@ const MiniAudioPlayer: FC<Props> = props => {
           <Text style={styles.name}>{onGoingAudio?.owner.name}</Text>
         </Pressable>
 
-        <Pressable onPress={() => favoriteMutate.mutate(onGoingAudio?.id || '')} style={{paddingHorizontal: 10}}>
+        <Pressable
+          onPress={() => favoriteMutate.mutate(onGoingAudio?.id || '')}
+          style={{paddingHorizontal: 10}}>
           <AntDesign
             name={isFav ? 'heart' : 'hearto'}
             size={24}
@@ -108,6 +125,7 @@ const MiniAudioPlayer: FC<Props> = props => {
         visible={playerVisibility}
         onRequestClose={closePlayerModal}
         onListOptionPress={handleOnListOptionPress}
+        onProfileLinkPress={handleOnProfileLinkPress}
       />
       <CurrentAudioList
         visible={showCurrentList}

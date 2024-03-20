@@ -7,6 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfileNavigatior from './ProfileNavigatior';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import HomeNavigatior from './HomeNavigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +23,7 @@ const TabNavigator = () => {
       }}>
       <Tab.Screen
         name="HomeScreen"
-        component={Home}
+        component={HomeNavigatior}
         options={{
           tabBarIcon: props => {
             return (
