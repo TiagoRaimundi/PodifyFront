@@ -3,9 +3,11 @@ import {FC} from 'react';
 import {View, StyleSheet, Text, Pressable, Image, FlatList} from 'react-native';
 import {useFetchRecommendedPlaylist} from 'src/hooks/query';
 
-interface Props {}
+interface Props {
+  onListPress(): void
+}
 
-const RecommendedPlaylist: FC<Props> = props => {
+const RecommendedPlaylist: FC<Props> = ({onListPress}) => {
   const {data} = useFetchRecommendedPlaylist();
 
   return (
@@ -18,7 +20,7 @@ const RecommendedPlaylist: FC<Props> = props => {
         keyExtractor={item => item.id}
         renderItem={({item}) => {
           return (
-            <Pressable style={styles.container}>
+            <Pressable onPress={() => onListPress(item)} style={styles.container}>
               <Image
                 source={require('../assets/music.png')}
                 style={styles.image}

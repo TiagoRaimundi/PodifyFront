@@ -3,11 +3,13 @@ import authReducer from './auth';
 import notificationReducer from './notification';
 
 import playerReducer from './player';
+import playlistModalReducer from './PlaylistModal';
 
 const reducer = combineReducers({
   auth: authReducer,
   notification: notificationReducer,
-  player: playerReducer
+  player: playerReducer,
+  playlistModal: playlistModalReducer,
 });
 
 const store = configureStore({

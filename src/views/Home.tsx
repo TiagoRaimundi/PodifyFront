@@ -17,9 +17,12 @@ import catchAsyncError from 'src/api/catchError';
 import {getClient} from 'src/api/client';
 import {useFetchPlaylist} from 'src/hooks/query';
 import useAudioController from 'src/hooks/useAudioController';
+import { updatePlaylistVisibility, updateSelectedListId } from 'src/store/PlaylistModal';
 import {updateNotification} from 'src/store/notification';
 
-interface Props {}
+interface Props {
+  onListPress(playlist: Playlist): void;
+}
 
 const Home: FC<Props> = props => {
   const [showOptions, setShowOptions] = useState(false);
@@ -97,6 +100,11 @@ const Home: FC<Props> = props => {
     }
   };
 
+  const handleOnListPress = (playlist: Playlist) => {
+    dispatch(updateSelectedListId(playlist.id))
+    dispatch(updatePlaylistVisibility(true))
+  }
+
   return (
     <AppView>
       <ScrollView contentContainerStyle={styles.container}>
@@ -105,28 +113,22 @@ const Home: FC<Props> = props => {
         </View>
 
         <View style={styles.space}>
-
           <LatestUploads
             onAudioPress={onAudioPress}
             onAudioLongPress={handleOnLongPress}
           />
-
         </View>
 
         <View style={styles.space}>
-
-        <RecommendedAudios
-          onAudioPress={onAudioPress}
-          onAudioLongPress={handleOnLongPress}
-        />
+          <RecommendedAudios
+            onAudioPress={onAudioPress}
+            onAudioLongPress={handleOnLongPress}
+          />
         </View>
 
         <View style={styles.space}>
-
-        <RecommendedPlaylist />
-
+          <RecommendedPlaylist onListPress={handleOnListPress} />
         </View>
-
 
         <OptionsModal
           visible={showOptions}
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   space: {
-    marginBottom: 15
+    marginBottom: 15,
   },
   optionContainer: {
     flexDirection: 'row',
