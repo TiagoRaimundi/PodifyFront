@@ -1,27 +1,43 @@
 import AudioListItem from '@ui/AudioListItem';
 import AudioListLoadingUI from '@ui/AudioListLoadingUI';
 import EmptyRecords from '@ui/EmptyRecords';
+import colors from '@utils/colors';
 import {FC} from 'react';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
-import { useSelector } from 'react-redux';
+import {RefreshControl} from 'react-native-gesture-handler';
+import { useQueries, useQueryClient } from 'react-query';
+import {useSelector} from 'react-redux';
 import {useFetchFavorite} from 'src/hooks/query';
 import useAudioController from 'src/hooks/useAudioController';
-import { getPlayerState } from 'src/store/player';
+import {getPlayerState} from 'src/store/player';
 
 interface Props {}
 
 const FavoriteTab: FC<Props> = props => {
-  const {onGoingAudio} = useSelector(getPlayerState)
-  const {data, isLoading} = useFetchFavorite();
+  const {onGoingAudio} = useSelector(getPlayerState);
+  const {data, isLoading, isFetching} = useFetchFavorite();
   const {onAudioPress} = useAudioController();
+  const queryClient = useQueryClient()
 
+  const handleOnRefresh = () => {
+    queryClient.invalidateQueries({queryKey: ['favorite']})
+  }
+  
   if (isLoading) return <AudioListLoadingUI />;
 
-  if (!data?.length)
-    return <EmptyRecords title="There is no favorite audio!" />;
-
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={isFetching}
+          onRefresh={handleOnRefresh}
+          tintColor={colors.CONTRAST}
+        />
+      }
+      style={styles.container}>
+      {!data?.length ? (
+        <EmptyRecords title="There is no favorite audio!" />
+      ) : null}
       {data?.map(item => {
         return (
           <AudioListItem

@@ -11,7 +11,9 @@ import {mapRange} from '@utils/math';
 import {useProgress} from 'react-native-track-player';
 import AudioPlayer from './AudioPlayer';
 import CurrentAudioList from './CurrentAudioList';
-import { useFetchIsFavorite } from 'src/hooks/query';
+import {useFetchIsFavorite} from 'src/hooks/query';
+import {useMutation, useQueryClient} from 'react-query';
+import {getClient} from 'src/api/client';
 
 interface Props {}
 
@@ -24,10 +26,28 @@ const MiniAudioPlayer: FC<Props> = props => {
   const [playerVisibility, setPlayerVisibility] = useState(false);
   const [showCurrentList, setShowCurrentList] = useState(false);
 
-  const {data: isFav} = useFetchIsFavorite(onGoingAudio?.id || '')
+  const {data: isFav} = useFetchIsFavorite(onGoingAudio?.id || '');
 
   const poster = onGoingAudio?.poster;
   const source = poster ? {uri: poster} : require('../assets/music.png');
+
+  const queryClient = useQueryClient();
+
+  const toggleIsFav = async (id: string) => {
+    if(!id) return;
+    const client = await getClient();
+    await client.post('/favorite?audioId='+ id)
+  };
+
+  const favoriteMutate = useMutation({
+    mutationFn: async id => toggleIsFav(id),
+    onMutate: (id: string) => {
+      queryClient.setQueryData<boolean>(
+        ['favorite', onGoingAudio?.id],
+        oldData => !oldData,
+      );
+    },
+  });
 
   const showPlayerModal = () => {
     setPlayerVisibility(true);
@@ -69,8 +89,12 @@ const MiniAudioPlayer: FC<Props> = props => {
           <Text style={styles.name}>{onGoingAudio?.owner.name}</Text>
         </Pressable>
 
-        <Pressable style={{paddingHorizontal: 10}}>
-          <AntDesign name={isFav? "heart" : "hearto"} size={24} color={colors.CONTRAST} />
+        <Pressable onPress={() => favoriteMutate.mutate(onGoingAudio?.id || '')} style={{paddingHorizontal: 10}}>
+          <AntDesign
+            name={isFav ? 'heart' : 'hearto'}
+            size={24}
+            color={colors.CONTRAST}
+          />
         </Pressable>
 
         {isBusy ? (
