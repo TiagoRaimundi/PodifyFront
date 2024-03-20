@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     color: colors.PRIMARY,
     paddingHorizontal: 4,
     paddingVertical: 2,
-    margin: 5,
+    marginTop: 5,
+    
   },
   settingsBtn: {
     width: 40,
