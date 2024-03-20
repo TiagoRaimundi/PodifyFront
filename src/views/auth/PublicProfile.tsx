@@ -7,6 +7,7 @@ import {
   HomeNavigatorStackParamList,
   ProfileNavigatorStackParamList,
 } from 'src/@types/navigation';
+import {useFetchPublicProfile} from 'src/hooks/query';
 
 type Props = NativeStackScreenProps<
   HomeNavigatorStackParamList,
@@ -14,16 +15,14 @@ type Props = NativeStackScreenProps<
 >;
 
 const PublicProfile: FC<Props> = ({route}) => {
-    const {profileId} = route.params
-    console.log(profileId)
+  const {profileId} = route.params;
+  const {data} = useFetchPublicProfile(profileId);
+  console.log(data)
   return (
     <AppView>
-
-    <View style={styles.container}>
-        
-      <Text style={{color: 'white'}}>Public Profile</Text>
-    </View>
-
+      <View style={styles.container}>
+        <Text style={{color: 'white'}}>Public Profile</Text>
+      </View>
     </AppView>
   );
 };

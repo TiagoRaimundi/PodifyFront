@@ -160,3 +160,22 @@ export const useFetchIsFavorite = (id: string) => {
     enabled: id ? true: false,
   });
 };
+
+
+const fetchPublicProfile = async (id: string): Promise<PublicProfile> => {
+  const client = await getClient();
+  const {data} = await client('/profile/info/audioId=' + id);
+  return data.profile;
+};
+
+export const useFetchPublicProfile = (id: string) => {
+  const dispatch = useDispatch();
+  return useQuery(['profile', id], {
+    queryFn: () => fetchPublicProfile(id),
+    onError(err) {
+      const errorMessage = catchAsyncError(err);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+    },
+    enabled: id ? true: false,
+  });
+};
