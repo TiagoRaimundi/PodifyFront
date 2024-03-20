@@ -37,6 +37,9 @@ const RecentlyPlayed: FC<Props> = props => {
       </PulseAnimationContainer>
     );
   }
+
+  if(!data.length) return null;
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Recently played</Text>
@@ -56,6 +59,8 @@ const RecentlyPlayed: FC<Props> = props => {
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {},
