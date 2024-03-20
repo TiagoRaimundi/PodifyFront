@@ -8,7 +8,7 @@ import RecommendedAudios from '@components/RecommendedAudios';
 import RecommendedPlaylist from '@components/RecommendedPlaylist';
 import colors from '@utils/colors';
 import {FC, useEffect, useState} from 'react';
-import {StyleSheet, Pressable, Text, ScrollView} from 'react-native';
+import {StyleSheet, Pressable, Text, ScrollView, View} from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 import MaterialComIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
@@ -100,17 +100,33 @@ const Home: FC<Props> = props => {
   return (
     <AppView>
       <ScrollView contentContainerStyle={styles.container}>
-        <RecentlyPlayed/>
-        <LatestUploads
-          onAudioPress={onAudioPress}
-          onAudioLongPress={handleOnLongPress}
-        />
+        <View style={styles.space}>
+          <RecentlyPlayed />
+        </View>
+
+        <View style={styles.space}>
+
+          <LatestUploads
+            onAudioPress={onAudioPress}
+            onAudioLongPress={handleOnLongPress}
+          />
+
+        </View>
+
+        <View style={styles.space}>
+
         <RecommendedAudios
           onAudioPress={onAudioPress}
           onAudioLongPress={handleOnLongPress}
         />
-        
-        <RecommendedPlaylist/>
+        </View>
+
+        <View style={styles.space}>
+
+        <RecommendedPlaylist />
+
+        </View>
+
 
         <OptionsModal
           visible={showOptions}
@@ -170,6 +186,9 @@ const Home: FC<Props> = props => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+  },
+  space: {
+    marginBottom: 15
   },
   optionContainer: {
     flexDirection: 'row',
