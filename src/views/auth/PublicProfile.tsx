@@ -1,11 +1,10 @@
 import AppView from '@components/AppView';
 import PublicPlaylistTab from '@components/profile/PublicPlaylistTab';
 
-
 import PublicProfileContainer from '@components/profile/PublicProfileContainer';
 import PublicUploadsTab from '@components/profile/PublicUploadsTab';
 
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import colors from '@utils/colors';
 import {FC} from 'react';
@@ -29,14 +28,24 @@ const PublicProfile: FC<Props> = ({route}) => {
       <View style={styles.container}>
         <PublicProfileContainer profile={data} />
         <Tab.Navigator
-        screenOptions={{
-          tabBarStyle: styles.tabbarStyle,
-          tabBarLabelStyle: styles.tabBaeLabelStyle,
-        }}>
-        <Tab.Screen name="PublicUploads" component={PublicUploadsTab} options={{tabBarLabel: "Uploads"}}/>
+          screenOptions={{
+            tabBarStyle: styles.tabbarStyle,
+            tabBarLabelStyle: styles.tabBaeLabelStyle,
+          }}>
+          <Tab.Screen
+            name="PublicUploads"
+            component={PublicUploadsTab}
+            options={{tabBarLabel: 'Uploads'}}
+            initialParams={{profileId}}
+          />
 
-        <Tab.Screen name="PublicPlaylist" component={PublicPlaylistTab} options={{tabBarLabel: "Playlist"}}/>
-      </Tab.Navigator>
+          <Tab.Screen
+            name="PublicPlaylist"
+            component={PublicPlaylistTab}
+            options={{tabBarLabel: 'Playlist'}}
+            initialParams={{profileId}}
+          />
+        </Tab.Navigator>
       </View>
     </AppView>
   );
@@ -45,7 +54,7 @@ const PublicProfile: FC<Props> = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    flex: 1
+    flex: 1,
   },
   tabbarStyle: {
     marginBottom: 20,
