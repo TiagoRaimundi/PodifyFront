@@ -22,3 +22,10 @@ export type HomeNavigatorStackParamList = {
   Home: undefined;
 };
 
+export type PublicProfileTabParamsList = {
+  PublicUploads: {profileId: string};
+  PublicPlaylist: {profileId: string};
+  
+};
+
+

@@ -1,21 +1,24 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import AudioListItem from '@ui/AudioListItem';
 import AudioListLoadingUI from '@ui/AudioListLoadingUI';
 import EmptyRecords from '@ui/EmptyRecords';
 import {FC} from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+import {PublicProfileTabParamsList} from 'src/@types/navigation';
 import {useFetchPublicUploads} from 'src/hooks/query';
 import useAudioController from 'src/hooks/useAudioController';
-import {getPlayerState, updateOnGoingAudio} from 'src/store/player';
+import {getPlayerState} from 'src/store/player';
 
-interface Props {}
+type Props = NativeStackScreenProps<
+  PublicProfileTabParamsList,
+  'PublicUploads'
+>;
 
 const PublicUploadsTab: FC<Props> = props => {
   const {data, isLoading} = useFetchPublicUploads(props.route.params.profileId);
-
-  const {onGoingAudio} = useSelector(getPlayerState)
-
-  const {onAudioPress} = useAudioController()
+  const {onAudioPress} = useAudioController();
+  const {onGoingAudio} = useSelector(getPlayerState);
 
   if (isLoading) return <AudioListLoadingUI />;
 
