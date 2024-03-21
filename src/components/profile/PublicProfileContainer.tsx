@@ -1,13 +1,15 @@
 import AvatarField from '@ui/AvatarField';
 import colors from '@utils/colors';
 import {FC} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-
+import {View, StyleSheet, Text, Pressable} from 'react-native';
+import {useFetchIsFollowing} from 'src/hooks/query';
 interface Props {
   profile?: PublicProfile;
 }
 
 const PublicProfileContainer: FC<Props> = ({profile}) => {
+  const {data: isFollowing} = useFetchIsFollowing(profile?.id || '');
+
   if (!profile) return null;
 
   return (
@@ -16,12 +18,13 @@ const PublicProfileContainer: FC<Props> = ({profile}) => {
 
       <View style={styles.profileInfoConatiner}>
         <Text style={styles.profileName}>{profile.name}</Text>
+        <Text style={styles.followerText}>{profile.followers} Followers</Text>
 
-        <View style={styles.flexRow}>
+        <Pressable style={styles.flexRow}>
           <Text style={styles.profileActionLink}>
-            {profile.followers} Followers
+            {isFollowing ? 'Unfollow' : 'Follow'}
           </Text>
-        </View>
+        </Pressable>
       </View>
     </View>
   );
@@ -35,6 +38,11 @@ const styles = StyleSheet.create({
   },
   profileInfoConatiner: {
     paddingLeft: 10,
+  },
+  followerText: {
+    color: colors.CONTRAST,
+    paddingVertical: 2,
+    marginTop: 5,
   },
   profileName: {
     color: colors.CONTRAST,
@@ -55,7 +63,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 2,
     marginTop: 5,
-    
   },
   settingsBtn: {
     width: 40,
