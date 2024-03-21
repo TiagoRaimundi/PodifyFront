@@ -13,7 +13,6 @@ const PlaylistTab: FC<Props> = props => {
     <ScrollView style={styles.container}>
       {!data?.length ? (
         <EmptyRecords title="There is no playlist!"/>
-
       ) : null}
       
       {data?.map(playlist => {

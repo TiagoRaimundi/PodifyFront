@@ -9,6 +9,7 @@ interface PlaylistModal {
 
 const initialState: PlaylistModal = {
   visible: false,
+
 };
 
 const slice = createSlice({
