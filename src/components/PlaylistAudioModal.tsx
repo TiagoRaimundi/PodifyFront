@@ -8,15 +8,19 @@ import {FlatList} from 'react-native-gesture-handler';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {useFetchPlaylistAudios} from 'src/hooks/query';
+import useAudioController from 'src/hooks/useAudioController';
 import {
   getPlaylistModalState,
   updatePlaylistVisibility,
 } from 'src/store/PlaylistModal';
+import {getPlayerState} from 'src/store/player';
 
 interface Props {}
 
 const PlaylistAudioModal: FC<Props> = props => {
   const {visible, selectedListId} = useSelector(getPlaylistModalState);
+  const {onGoingAudio} = useSelector(getPlayerState);
+  const {onAudioPress} = useAudioController();
   const dispatch = useDispatch();
   const {data, isLoading} = useFetchPlaylistAudios(selectedListId || '');
   const handleClose = () => {
@@ -24,12 +28,11 @@ const PlaylistAudioModal: FC<Props> = props => {
   };
 
   if (isLoading)
-  
-  return (
-    <View style={styles.container}>
-      <AudioListLoadingUI />
-    </View>
-  );
+    return (
+      <View style={styles.container}>
+        <AudioListLoadingUI />
+      </View>
+    );
 
   return (
     <AppModal visible={visible} onRequestClose={handleClose}>
@@ -39,7 +42,13 @@ const PlaylistAudioModal: FC<Props> = props => {
         data={data?.audios}
         keyExtractor={item => item.id}
         renderItem={({item}) => {
-          return <AudioListItem audio={item} />;
+          return (
+            <AudioListItem
+              onPress={() => onAudioPress(item, data?.audios || [])}
+              isPlaying={onGoingAudio?.id === item.id}
+              audio={item}
+            />
+          );
         }}
       />
     </AppModal>

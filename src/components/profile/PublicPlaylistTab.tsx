@@ -12,7 +12,7 @@ type Props = NativeStackScreenProps<
   PublicProfileTabParamsList,
   'PublicPlaylist'
 >;
-
+ 
 const PublicPlaylistTab: FC<Props> = props => {
   const {data} = useFetchPublicPlaylist(props.route.params.profileId);
 
