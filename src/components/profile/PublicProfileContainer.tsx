@@ -2,13 +2,44 @@ import AvatarField from '@ui/AvatarField';
 import colors from '@utils/colors';
 import {FC} from 'react';
 import {View, StyleSheet, Text, Pressable} from 'react-native';
+import {useMutation, useQueryClient} from 'react-query';
+import {useDispatch} from 'react-redux';
+import catchAsyncError from 'src/api/catchError';
+import {getClient} from 'src/api/client';
 import {useFetchIsFollowing} from 'src/hooks/query';
+import {updateNotification} from 'src/store/notification';
+
 interface Props {
   profile?: PublicProfile;
 }
 
 const PublicProfileContainer: FC<Props> = ({profile}) => {
   const {data: isFollowing} = useFetchIsFollowing(profile?.id || '');
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const followingMutation = useMutation({
+    mutationFn: async id => toggleFollowing(id),
+    onMutate: (id: string) => {
+      queryClient.setQueryData<boolean>(
+        ['is-following', id],
+        odlData => !odlData,
+      );
+    },
+  });
+
+  const toggleFollowing = async (id: string) => {
+    try {
+      if (!id) return;
+
+      const client = await getClient();
+      await client.post('/profile/update-follower/' + id);
+      queryClient.invalidateQueries({queryKey: ['profile', id]});
+    } catch (error) {
+      const errorMessage = catchAsyncError(error);
+      dispatch(updateNotification({message: errorMessage, type: 'error'}));
+    }
+  };
 
   if (!profile) return null;
 
@@ -20,7 +51,9 @@ const PublicProfileContainer: FC<Props> = ({profile}) => {
         <Text style={styles.profileName}>{profile.name}</Text>
         <Text style={styles.followerText}>{profile.followers} Followers</Text>
 
-        <Pressable style={styles.flexRow}>
+        <Pressable
+          onPress={() => followingMutation.mutate(profile.id)}
+          style={styles.flexRow}>
           <Text style={styles.profileActionLink}>
             {isFollowing ? 'Unfollow' : 'Follow'}
           </Text>
@@ -39,11 +72,6 @@ const styles = StyleSheet.create({
   profileInfoConatiner: {
     paddingLeft: 10,
   },
-  followerText: {
-    color: colors.CONTRAST,
-    paddingVertical: 2,
-    marginTop: 5,
-  },
   profileName: {
     color: colors.CONTRAST,
     fontSize: 18,
@@ -61,6 +89,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.SECONDARY,
     color: colors.PRIMARY,
     paddingHorizontal: 4,
+    paddingVertical: 2,
+    marginTop: 5,
+  },
+  followerText: {
+    color: colors.CONTRAST,
     paddingVertical: 2,
     marginTop: 5,
   },
