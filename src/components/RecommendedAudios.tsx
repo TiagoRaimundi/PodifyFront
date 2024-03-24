@@ -3,33 +3,30 @@ import GridView from '@ui/GridView';
 import PulseAnimationContainer from '@ui/PulseAnimationContainer';
 import colors from '@utils/colors';
 import {FC} from 'react';
-import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import {useSelector} from 'react-redux';
 import {AudioData} from 'src/@types/audio';
 import {useFetchRecommendedAudios} from 'src/hooks/query';
-import {getPlayerState, updateOnGoingAudio} from 'src/store/player';
+import {getPlayerState} from 'src/store/player';
 
 interface Props {
   onAudioPress(item: AudioData, data: AudioData[]): void;
   onAudioLongPress(item: AudioData, data: AudioData[]): void;
 }
-
 const dummyData = new Array(6).fill('');
+
 const RecommendedAudios: FC<Props> = ({onAudioLongPress, onAudioPress}) => {
   const {data = [], isLoading} = useFetchRecommendedAudios();
   const {onGoingAudio} = useSelector(getPlayerState);
 
-  const getPoster = (poster?: string) => {
-    return poster ? {uri: poster} : require('../assets/music.png');
-  };
   if (isLoading)
     return (
       <PulseAnimationContainer>
-        <View style={styles.container}>
+        <View>
           <View style={styles.dummyTitleView} />
           <GridView
             col={3}
-            data={data || []}
+            data={dummyData}
             renderItem={item => {
               return <View style={styles.dummyAudioView} />;
             }}
@@ -37,8 +34,9 @@ const RecommendedAudios: FC<Props> = ({onAudioLongPress, onAudioPress}) => {
         </View>
       </PulseAnimationContainer>
     );
+
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={styles.title}>You may like this</Text>
       <GridView
         col={3}
@@ -61,9 +59,6 @@ const RecommendedAudios: FC<Props> = ({onAudioLongPress, onAudioPress}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-  },
   title: {
     color: colors.CONTRAST,
     fontSize: 20,

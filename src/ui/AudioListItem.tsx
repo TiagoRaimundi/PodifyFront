@@ -3,20 +3,28 @@ import {FC} from 'react';
 import {View, StyleSheet, Pressable, Image, Text} from 'react-native';
 import {AudioData} from 'src/@types/audio';
 import PlayAnimation from './PlayAnimation';
-import {isPlaying} from 'react-native-track-player';
 
 interface Props {
   audio: AudioData;
   onPress?(): void;
-  isPlaying?: boolean
+  onLongPress?(): void;
+  isPlaying?: boolean;
 }
 
-const AudioListItem: FC<Props> = ({audio, onPress, isPlaying = false}) => {
+const AudioListItem: FC<Props> = ({
+  audio,
+  isPlaying = false,
+  onPress,
+  onLongPress,
+}) => {
   const getSource = (poster?: string) => {
     return poster ? {uri: poster} : require('../assets/music_small.png');
   };
   return (
-    <Pressable onPress={onPress} style={styles.listItem}>
+    <Pressable
+      onLongPress={onLongPress}
+      onPress={onPress}
+      style={styles.listItem}>
       <View>
         <Image source={getSource(audio.poster)} style={styles.poster} />
         <PlayAnimation visible={isPlaying} />

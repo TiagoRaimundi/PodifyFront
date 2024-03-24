@@ -1,23 +1,21 @@
-import {FC} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {FC} from 'react';
+import {View, StyleSheet, ViewStyle} from 'react-native';
 
 interface Props<T> {
   data: T[];
-  renderItem(item: T): JSX.Element;
-  col?: number
+  renderItem: (item: T) => JSX.Element;
+  col?: number;
+  itemStyle?: ViewStyle; // Adiciona a capacidade de passar estilos personalizados para o item
 }
 
-const GridView = <T extends any>(props: Props<T>) => {
-  const {data, col = 2, renderItem} = props;
+const GridView: FC<Props<any>> = ({data, col = 2, renderItem, itemStyle}) => {
   return (
     <View style={styles.container}>
-      {data.map((item, index) => {
-        return (
-          <View key={index} style={{width: 100 / col +'%'}}>
-            <View style={{padding: 5}}>{renderItem(item)}</View>
-          </View>
-        );
-      })}
+      {data.map((item, index) => (
+        <View key={index} style={[{ width: `${100 / col}%` }, styles.itemContainer, itemStyle]}>
+          {renderItem(item)}
+        </View>
+      ))}
     </View>
   );
 };
@@ -27,6 +25,9 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+  itemContainer: {
+    padding: 5, // Considerando mover o padding para cá para simplificar
   },
 });
 

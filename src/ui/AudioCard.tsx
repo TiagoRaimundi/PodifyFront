@@ -13,7 +13,7 @@ import PlayAnimation from './PlayAnimation';
 
 interface Props {
   title: string;
-  poster?: string;
+  poster?: string
   playing?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
   onPress?(): void;
@@ -28,7 +28,9 @@ const AudioCard: FC<Props> = ({
   onLongPress,
   onPress,
 }) => {
+
   const source = poster ? {uri: poster} : require('../assets/music.png');
+
   return (
     <Pressable
       onPress={onPress}

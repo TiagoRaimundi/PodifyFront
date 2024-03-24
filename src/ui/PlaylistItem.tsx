@@ -7,7 +7,7 @@ import colors from '@utils/colors';
 
 interface Props {
   playlist: Playlist;
-  onPress?(): void
+  onPress?(): void;
 }
 
 const PlaylistItem: FC<Props> = ({playlist, onPress}) => {
@@ -69,10 +69,11 @@ const styles = StyleSheet.create({
     color: colors.SECONDARY,
     fontWeight: 'bold',
     marginLeft: 5,
-  }, iconContainer:{
+  },
+  iconContainer: {
     flexDirection: 'row',
-    paddingTop: 4
-  }
+    paddingTop: 4,
+  },
 });
 
 export default PlaylistItem;

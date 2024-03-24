@@ -17,7 +17,7 @@ import catchAsyncError from 'src/api/catchError';
 import {getClient} from 'src/api/client';
 import {useFetchPlaylist} from 'src/hooks/query';
 import useAudioController from 'src/hooks/useAudioController';
-import { updatePlaylistVisibility, updateSelectedListId } from 'src/store/PlaylistModal';
+import { updatePlaylistVisbility, updateSelectedListId } from 'src/store/PlaylistModal';
 import {updateNotification} from 'src/store/notification';
 
 interface Props {
@@ -102,7 +102,7 @@ const Home: FC<Props> = props => {
 
   const handleOnListPress = (playlist: Playlist) => {
     dispatch(updateSelectedListId(playlist.id))
-    dispatch(updatePlaylistVisibility(true))
+    dispatch(updatePlaylistVisbility(true))
   }
 
   return (

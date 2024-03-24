@@ -1,26 +1,24 @@
-import {FC} from 'react';
-import {View, StyleSheet} from 'react-native';
-import { createNativeStackNavigator} from '@react-navigation/native-stack'
-import Profile from '@views/Profile';
-import ProfileSettings from '@components/profile/ProfileSettings';
-import Verification from '@views/auth/Verification';
-import { HomeNavigatorStackParamList, ProfileNavigatorStackParamList } from 'src/@types/navigation';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '@views/Home';
 import PublicProfile from '@views/auth/PublicProfile';
+import { HomeNavigatorStackParamList } from 'src/@types/navigation';
 
-const Stack = createNativeStackNavigator<HomeNavigatorStackParamList>()
+const Stack = createNativeStackNavigator<HomeNavigatorStackParamList>();
 
-interface Props {}
-
-const HomeNavigatior: FC<Props> = (props) => {
-  return <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name='Home' component={Home}/>
-    <Stack.Screen name='PublicProfile' component={PublicProfile}/>
-  </Stack.Navigator>;
- }
+// Removed Props as it's not being used
+const HomeNavigator: React.FC = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Home' component={Home} />
+      <Stack.Screen name='PublicProfile' component={PublicProfile} />
+    </Stack.Navigator>
+  );
+};
  
- const styles = StyleSheet.create({
-   container: {} 
-}) 
+const styles = StyleSheet.create({
+  container: {} 
+});
   
-export default HomeNavigatior; 
+export default HomeNavigator;
